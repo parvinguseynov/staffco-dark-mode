@@ -32,6 +32,17 @@ function App() {
   // Get theme context
   const { isDarkMode, toggleTheme: contextToggleTheme, theme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
 
+  // Debug: Log theme state on mount and when it changes
+  useEffect(() => {
+    console.log('=== APP Theme State ===', {
+      isDarkMode,
+      themeExists: !!theme,
+      hasApp: !!theme?.app,
+      hasDesktop: !!theme?.desktop,
+      appWindowBg: theme?.app?.windowBg,
+    });
+  }, [isDarkMode, theme]);
+
   // Navigation state
   const [currentScreen, setCurrentScreen] = useState('tasks');
   const [activeTab, setActiveTab] = useState('tasks');

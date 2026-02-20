@@ -1,7 +1,15 @@
 import { createContext, useState, useEffect } from 'react';
 import { darkTheme, lightTheme } from '../theme/colors';
 
-export const ThemeContext = createContext();
+// Create context with default value to prevent undefined errors
+export const ThemeContext = createContext({
+  isDarkMode: true,
+  theme: darkTheme,
+  toggleTheme: () => {},
+  customColors: null,
+  setCustomColors: () => {},
+  resetToDefaultTheme: () => {},
+});
 
 export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -14,8 +22,16 @@ export function ThemeProvider({ children }) {
     const savedColors = localStorage.getItem('staffco-custom-colors');
     if (savedColors) {
       try {
-        return JSON.parse(savedColors);
+        const parsed = JSON.parse(savedColors);
+        // Validate that parsed colors have the required structure
+        if (parsed && parsed.app && parsed.desktop) {
+          return parsed;
+        }
+        console.warn('Invalid custom colors in localStorage, resetting');
+        localStorage.removeItem('staffco-custom-colors');
+        return null;
       } catch (e) {
+        console.error('Failed to parse custom colors:', e);
         return null;
       }
     }
@@ -23,7 +39,26 @@ export function ThemeProvider({ children }) {
   });
 
   // Get the current theme (custom or default)
-  const currentTheme = customColors || (isDarkMode ? darkTheme : lightTheme);
+  // CRITICAL: Always ensure we return a valid theme with app and desktop properties
+  const baseTheme = isDarkMode ? darkTheme : lightTheme;
+  const currentTheme = customColors || baseTheme;
+
+  // Safety check: Ensure theme always has required properties
+  const safeTheme = {
+    app: currentTheme?.app || baseTheme.app,
+    desktop: currentTheme?.desktop || baseTheme.desktop,
+  };
+
+  // Debug logging
+  useEffect(() => {
+    console.log('=== ThemeProvider State ===', {
+      isDarkMode,
+      hasCustomColors: !!customColors,
+      themeValid: !!(safeTheme && safeTheme.app && safeTheme.desktop),
+      appColors: Object.keys(safeTheme?.app || {}),
+      desktopColors: Object.keys(safeTheme?.desktop || {}),
+    });
+  }, [isDarkMode, customColors, safeTheme]);
 
   useEffect(() => {
     localStorage.setItem('staffco-theme', isDarkMode ? 'dark' : 'light');
@@ -61,7 +96,7 @@ export function ThemeProvider({ children }) {
     <ThemeContext.Provider value={{
       isDarkMode,
       toggleTheme,
-      theme: currentTheme,
+      theme: safeTheme,
       customColors,
       setCustomColors: updateCustomColors,
       resetToDefaultTheme,

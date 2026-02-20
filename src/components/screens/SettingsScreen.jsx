@@ -16,16 +16,6 @@ export function SettingsScreen() {
     windowBg: theme?.app?.windowBg,
   });
 
-  if (!theme || !theme.app) {
-    console.error('ERROR: Theme or theme.app is undefined in SettingsScreen!');
-    return (
-      <div style={{ padding: '20px', color: 'white', background: '#0F172A' }}>
-        <h2>Error: Theme not loaded</h2>
-        <pre>{JSON.stringify({ theme, isDarkMode }, null, 2)}</pre>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>
       <div className="p-5 overflow-y-auto flex-1">

@@ -14,6 +14,20 @@ import DesignSystemPanel from './components/DesignSystemPanel';
 import { ThemeContext } from './context/ThemeContext';
 import { darkTheme, lightTheme } from './theme/colors';
 
+// Initial data constants for reset functionality
+const initialTasks = [
+  { id: 1, name: 'UX/UI Improvements...', project: 'StaffCo', projectId: 1, seconds: 1805, isFavorite: false },
+  { id: 2, name: 'General - StaffCo', project: 'StaffCo', projectId: 1, seconds: 2160, isFavorite: false },
+  { id: 3, name: 'Meetings & Communication', project: 'StaffCo', projectId: 1, seconds: 4868, isFavorite: false },
+  { id: 4, name: 'TimeOff - New Feature...', project: 'StaffCo', projectId: 1, seconds: 67, isFavorite: false },
+];
+
+const initialProjects = [
+  { id: 1, name: 'StaffCo', color: '#34D399', initials: 'S', isFavorite: false },
+  { id: 2, name: 'Paid Time Off (Only HR...', color: '#A78BFA', initials: 'P', isFavorite: false },
+  { id: 3, name: 'BP - BitPlay', color: '#F472B6', initials: 'B', isFavorite: false },
+];
+
 function App() {
   // Get theme context
   const { isDarkMode, toggleTheme: contextToggleTheme, theme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
@@ -27,21 +41,12 @@ function App() {
   // Initialize tasks from localStorage or defaults
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('staffco-tasks');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, name: 'UX/UI Improvements...', project: 'StaffCo', projectId: 1, seconds: 1805, isFavorite: false },
-      { id: 2, name: 'General - StaffCo', project: 'StaffCo', projectId: 1, seconds: 2160, isFavorite: false },
-      { id: 3, name: 'Meetings & Communication', project: 'StaffCo', projectId: 1, seconds: 4868, isFavorite: false },
-      { id: 4, name: 'TimeOff - New Feature...', project: 'StaffCo', projectId: 1, seconds: 67, isFavorite: false },
-    ];
+    return saved ? JSON.parse(saved) : [...initialTasks];
   });
 
   const [projects, setProjects] = useState(() => {
     const saved = localStorage.getItem('staffco-projects');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, name: 'StaffCo', color: '#34D399', initials: 'S', isFavorite: false },
-      { id: 2, name: 'Paid Time Off (Only HR...', color: '#A78BFA', initials: 'P', isFavorite: false },
-      { id: 3, name: 'BP - BitPlay', color: '#F472B6', initials: 'B', isFavorite: false },
-    ];
+    return saved ? JSON.parse(saved) : [...initialProjects];
   });
 
   // Save projects to localStorage whenever they change
@@ -188,6 +193,45 @@ function App() {
     setCurrentScreen('login');
   };
 
+  const handleResetDemo = () => {
+    const confirmed = window.confirm(
+      'Reset demo?\n\nThis will:\n• Stop the timer\n• Clear all favorites\n• Reset task times\n• Reset colors to default\n• Return to Tasks screen\n\nThis action cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    // Stop timer
+    setTimerRunning(false);
+    setElapsedSeconds(0);
+
+    // Reset active task
+    setActiveTaskId(null);
+
+    // Reset tasks to initial state
+    setTasks([...initialTasks]);
+
+    // Reset projects to initial state
+    setProjects([...initialProjects]);
+
+    // Reset navigation
+    setCurrentScreen('tasks');
+    setActiveTab('tasks');
+    setSelectedProject(null);
+
+    // Reset colors to default
+    resetToDefaultTheme();
+
+    // Clear localStorage
+    localStorage.removeItem('staffco-tasks');
+    localStorage.removeItem('staffco-projects');
+    localStorage.removeItem('staffco-custom-colors');
+
+    // Close any open modals
+    setShowAddTaskModal(false);
+
+    console.log('✅ Demo reset complete');
+  };
+
   const showHeader = !['login', 'company'].includes(currentScreen);
   const showBackButton = ['settings', 'company', 'projectDetail'].includes(currentScreen);
 
@@ -204,7 +248,7 @@ function App() {
 
   return (
     <Desktop>
-      <MenuBar />
+      <MenuBar onResetDemo={handleResetDemo} />
 
       <AppWindow>
         <div className="flex flex-col h-full">
@@ -334,6 +378,7 @@ function App() {
         isDarkMode={isDarkMode}
         setIsDarkMode={contextToggleTheme}
         onReset={resetToDefaultTheme}
+        onResetDemo={handleResetDemo}
       />
     </Desktop>
   );

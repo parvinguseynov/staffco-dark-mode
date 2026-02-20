@@ -3,7 +3,7 @@ import { Apple, Battery, Wifi, Search } from 'lucide-react';
 import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
-export function MenuBar() {
+export function MenuBar({ onResetDemo }) {
   const { theme, isDarkMode } = useContext(ThemeContext);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -55,6 +55,27 @@ export function MenuBar() {
 
       {/* Right side */}
       <div className="flex items-center gap-3 text-menu">
+        {onResetDemo && (
+          <button
+            onClick={onResetDemo}
+            title="Reset Demo"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: textColor,
+              cursor: 'pointer',
+              fontSize: '13px',
+              padding: '2px 6px',
+              borderRadius: '4px',
+              opacity: 0.7,
+              transition: 'opacity 0.2s ease',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
+          >
+            ↺
+          </button>
+        )}
         <Battery size={16} className="opacity-80" />
         <Wifi size={16} className="opacity-80" />
         <Search size={14} className="opacity-80" />

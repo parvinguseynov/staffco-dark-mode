@@ -87,7 +87,7 @@ const ColorPicker = ({ label, value, onChange, isDarkMode }) => {
   );
 };
 
-const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset }) => {
+const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset, onResetDemo }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [copiedText, setCopiedText] = useState(null);
 
@@ -395,6 +395,53 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
               >
                 {copiedText === 'CSS' ? '✓ Copied!' : '📝 Copy CSS Variables'}
               </button>
+            </div>
+
+            {/* Reset Demo Section */}
+            <div style={{
+              marginTop: '24px',
+              paddingTop: '24px',
+              borderTop: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+            }}>
+              <button
+                onClick={onResetDemo}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                  color: 'white',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)',
+                  transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(239, 68, 68, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                }}
+              >
+                🔄 Reset Demo
+              </button>
+
+              <p style={{
+                margin: '12px 0 0 0',
+                fontSize: '11px',
+                color: isDarkMode ? '#64748B' : '#94A3B8',
+                textAlign: 'center',
+              }}>
+                Resets timer, favorites, colors, and navigation
+              </p>
             </div>
 
             {/* Footer */}

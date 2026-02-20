@@ -71,7 +71,7 @@ export function Dock({ onStaffCoClick }) {
               scale={getScale(index)}
             >
               <img
-                src="/logo.png"
+                src={isDarkMode ? "/white_logo.png" : "/logo.png"}
                 alt="StaffCo"
                 className="w-full h-full rounded-xl shadow-lg cursor-pointer"
                 style={{

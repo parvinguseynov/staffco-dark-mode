@@ -1,37 +1,28 @@
 import { useState, useContext } from 'react';
 import { Eye, Chrome } from 'lucide-react';
 import { ThemeContext } from '../../context/ThemeContext';
-import { darkTheme, lightTheme } from '../../theme/colors';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 
-function Logo() {
-  return (
-    <div className="flex items-center gap-2 justify-center mb-8">
-      <img
-        src="/logo.png"
-        alt="StaffCo"
-        style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '10px',
-          objectFit: 'contain',
-        }}
-      />
-      <span className="text-xl font-semibold">StaffCo</span>
-    </div>
-  );
-}
-
 export function LoginScreen({ onLogin }) {
-  const { theme } = useContext(ThemeContext);
+  const { theme, isDarkMode } = useContext(ThemeContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
   return (
     <div className="flex flex-col h-full p-5" style={{ background: theme.app.windowBg, color: theme.app.textPrimary }}>
-      <Logo />
+      <div className="flex items-center justify-center mb-8">
+        <img
+          src={isDarkMode ? "/white_logo.png" : "/logo.png"}
+          alt="StaffCo"
+          style={{
+            height: '40px',
+            width: 'auto',
+            objectFit: 'contain',
+          }}
+        />
+      </div>
 
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold mb-2">Welcome to StaffCo</h1>

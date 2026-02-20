@@ -1,29 +1,10 @@
 import { useContext, useState } from 'react';
 import { MessageCircle, Settings } from 'lucide-react';
 import { ThemeContext } from '../../context/ThemeContext';
-import { darkTheme, lightTheme } from '../../theme/colors';
 import { UserDropdownMenu } from './UserDropdownMenu';
 
-function Logo() {
-  return (
-    <div className="flex items-center gap-2">
-      <img
-        src="/logo.png"
-        alt="StaffCo"
-        style={{
-          width: '32px',
-          height: '32px',
-          borderRadius: '8px',
-          objectFit: 'contain',
-        }}
-      />
-      <span className="font-semibold">StaffCo</span>
-    </div>
-  );
-}
-
 export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onBackClick, onLogout, backButtonText = 'Back' }) {
-  const { theme } = useContext(ThemeContext);
+  const { theme, isDarkMode } = useContext(ThemeContext);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (
@@ -43,7 +24,17 @@ export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onB
           ← {backButtonText}
         </button>
       ) : (
-        <Logo />
+        <div className="flex items-center">
+          <img
+            src={isDarkMode ? "/white_logo.png" : "/logo.png"}
+            alt="StaffCo"
+            style={{
+              height: '28px',
+              width: 'auto',
+              objectFit: 'contain',
+            }}
+          />
+        </div>
       )}
 
       <div className="flex items-center gap-3 relative">

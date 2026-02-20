@@ -17,48 +17,53 @@ export function ThemeProvider({ children }) {
     return saved !== 'light'; // Default to dark mode
   });
 
-  // Custom colors state - load from localStorage if available
+  // Custom colors state - load from localStorage with validation
   const [customColors, setCustomColors] = useState(() => {
     const savedColors = localStorage.getItem('staffco-custom-colors');
     if (savedColors) {
       try {
         const parsed = JSON.parse(savedColors);
-        // Validate that parsed colors have the required structure
+        // Validate structure - must have both app and desktop properties
         if (parsed && parsed.app && parsed.desktop) {
           return parsed;
         }
-        console.warn('Invalid custom colors in localStorage, resetting');
+        // Invalid structure, clear it
+        console.warn('Clearing corrupted custom colors from localStorage');
         localStorage.removeItem('staffco-custom-colors');
         return null;
       } catch (e) {
-        console.error('Failed to parse custom colors:', e);
+        console.error('Failed to parse custom colors, clearing:', e);
+        localStorage.removeItem('staffco-custom-colors');
         return null;
       }
     }
     return null;
   });
 
-  // Get the current theme (custom or default)
-  // CRITICAL: Always ensure we return a valid theme with app and desktop properties
   const baseTheme = isDarkMode ? darkTheme : lightTheme;
-  const currentTheme = customColors || baseTheme;
 
-  // Safety check: Ensure theme always has required properties
+  // Safe theme merge - ensures app and desktop properties always exist
+  const currentTheme = customColors
+    ? {
+        ...baseTheme,
+        ...customColors,
+        app: {
+          ...baseTheme.app,
+          ...(customColors.app || {}),
+        },
+        desktop: {
+          ...baseTheme.desktop,
+          ...(customColors.desktop || {}),
+        },
+      }
+    : baseTheme;
+
+  // Final safety check - guarantee app and desktop properties exist
   const safeTheme = {
-    app: currentTheme?.app || baseTheme.app,
-    desktop: currentTheme?.desktop || baseTheme.desktop,
+    ...currentTheme,
+    app: currentTheme.app || baseTheme.app,
+    desktop: currentTheme.desktop || baseTheme.desktop,
   };
-
-  // Debug logging
-  useEffect(() => {
-    console.log('=== ThemeProvider State ===', {
-      isDarkMode,
-      hasCustomColors: !!customColors,
-      themeValid: !!(safeTheme && safeTheme.app && safeTheme.desktop),
-      appColors: Object.keys(safeTheme?.app || {}),
-      desktopColors: Object.keys(safeTheme?.desktop || {}),
-    });
-  }, [isDarkMode, customColors, safeTheme]);
 
   useEffect(() => {
     localStorage.setItem('staffco-theme', isDarkMode ? 'dark' : 'light');
@@ -76,6 +81,20 @@ export function ThemeProvider({ children }) {
     }
   }, [customColors]);
 
+  // Debug logging
+  useEffect(() => {
+    console.log('=== ThemeProvider State ===', {
+      isDarkMode,
+      hasCustomColors: !!customColors,
+      themeValid: !!(safeTheme && safeTheme.app && safeTheme.desktop),
+      appExists: !!safeTheme?.app,
+      desktopExists: !!safeTheme?.desktop,
+      windowBg: safeTheme?.app?.windowBg,
+      appColorKeys: Object.keys(safeTheme?.app || {}).length,
+      desktopColorKeys: Object.keys(safeTheme?.desktop || {}).length,
+    });
+  }, [isDarkMode, customColors, safeTheme]);
+
   const toggleTheme = () => {
     setIsDarkMode(prev => !prev);
     // Reset custom colors when switching theme
@@ -84,7 +103,24 @@ export function ThemeProvider({ children }) {
   };
 
   const updateCustomColors = (newColors) => {
-    setCustomColors(newColors);
+    // Ensure the new colors have proper structure
+    if (newColors) {
+      const merged = {
+        ...baseTheme,
+        ...newColors,
+        app: {
+          ...baseTheme.app,
+          ...(newColors.app || {}),
+        },
+        desktop: {
+          ...baseTheme.desktop,
+          ...(newColors.desktop || {}),
+        },
+      };
+      setCustomColors(merged);
+    } else {
+      setCustomColors(null);
+    }
   };
 
   const resetToDefaultTheme = () => {

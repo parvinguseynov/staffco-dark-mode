@@ -266,6 +266,97 @@ function App() {
   // Get active task object
   const activeTask = activeTaskId ? tasks.find(t => t.id === activeTaskId) : null;
 
+  // Render function for current screen - prevents AnimatePresence issues with timer updates
+  const renderScreen = () => {
+    console.log('=== RENDERING SCREEN ===', {
+      currentScreen,
+      activeTaskId,
+      timerRunning,
+      elapsedSeconds,
+    });
+
+    switch (currentScreen) {
+      case 'login':
+        return <LoginScreen onLogin={handleLogin} />;
+
+      case 'company':
+        return (
+          <CompanyScreen
+            onSelectCompany={handleSelectCompany}
+            onBackClick={handleBackClick}
+          />
+        );
+
+      case 'tasks':
+        return (
+          <TasksScreen
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            tasks={tasks}
+            projects={projects}
+            activeTask={activeTask}
+            timerRunning={timerRunning}
+            elapsedSeconds={elapsedSeconds}
+            formatTime={formatTime}
+            onStartTask={handleStartTask}
+            onStopTask={handleStopTask}
+            onToggleFavorite={handleToggleFavorite}
+            onToggleProjectFavorite={handleToggleProjectFavorite}
+            onProjectClick={handleProjectClick}
+            showAddTaskModal={showAddTaskModal}
+            onOpenAddTaskModal={() => setShowAddTaskModal(true)}
+            onCloseAddTaskModal={() => setShowAddTaskModal(false)}
+            onAddTask={handleAddTask}
+          />
+        );
+
+      case 'projectDetail':
+        return (
+          <ProjectDetailScreen
+            project={selectedProject}
+            tasks={tasks.filter(t => t.projectId === selectedProject?.id)}
+            activeTask={activeTask}
+            timerRunning={timerRunning}
+            elapsedSeconds={elapsedSeconds}
+            formatTime={formatTime}
+            onStartTask={handleStartTask}
+            onStopTask={handleStopTask}
+            onToggleFavorite={handleToggleFavorite}
+            showAddTaskModal={showAddTaskModal}
+            onOpenAddTaskModal={() => setShowAddTaskModal(true)}
+            onCloseAddTaskModal={() => setShowAddTaskModal(false)}
+            onAddTask={handleAddTask}
+          />
+        );
+
+      case 'settings':
+        return <SettingsScreen />;
+
+      default:
+        return (
+          <TasksScreen
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            tasks={tasks}
+            projects={projects}
+            activeTask={activeTask}
+            timerRunning={timerRunning}
+            elapsedSeconds={elapsedSeconds}
+            formatTime={formatTime}
+            onStartTask={handleStartTask}
+            onStopTask={handleStopTask}
+            onToggleFavorite={handleToggleFavorite}
+            onToggleProjectFavorite={handleToggleProjectFavorite}
+            onProjectClick={handleProjectClick}
+            showAddTaskModal={showAddTaskModal}
+            onOpenAddTaskModal={() => setShowAddTaskModal(true)}
+            onCloseAddTaskModal={() => setShowAddTaskModal(false)}
+            onAddTask={handleAddTask}
+          />
+        );
+    }
+  };
+
   return (
     <Desktop>
       <MenuBar onResetDemo={handleResetDemo} />
@@ -285,109 +376,18 @@ function App() {
 
           <div className="flex-1 overflow-hidden">
             <AnimatePresence mode="wait">
-            {currentScreen === 'login' && (
               <motion.div
-                key="login"
-                initial={{ opacity: 0, x: 20 }}
+                key={currentScreen}
+                initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
                 className="h-full"
               >
-                <LoginScreen onLogin={handleLogin} />
+                {renderScreen()}
               </motion.div>
-            )}
-
-            {currentScreen === 'company' && (
-              <motion.div
-                key="company"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full"
-              >
-                <CompanyScreen
-                  onSelectCompany={handleSelectCompany}
-                  onBackClick={handleBackClick}
-                />
-              </motion.div>
-            )}
-
-            {currentScreen === 'tasks' && (
-              <motion.div
-                key="tasks"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full"
-              >
-                <TasksScreen
-                  activeTab={activeTab}
-                  onTabChange={handleTabChange}
-                  tasks={tasks}
-                  projects={projects}
-                  activeTask={activeTask}
-                  timerRunning={timerRunning}
-                  elapsedSeconds={elapsedSeconds}
-                  formatTime={formatTime}
-                  onStartTask={handleStartTask}
-                  onStopTask={handleStopTask}
-                  onToggleFavorite={handleToggleFavorite}
-                  onToggleProjectFavorite={handleToggleProjectFavorite}
-                  onProjectClick={handleProjectClick}
-                  showAddTaskModal={showAddTaskModal}
-                  onOpenAddTaskModal={() => setShowAddTaskModal(true)}
-                  onCloseAddTaskModal={() => setShowAddTaskModal(false)}
-                  onAddTask={handleAddTask}
-                />
-              </motion.div>
-            )}
-
-            {currentScreen === 'projectDetail' && (
-              <motion.div
-                key="projectDetail"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full"
-              >
-                {console.log('RENDERING ProjectDetailScreen with project:', selectedProject)}
-                <ProjectDetailScreen
-                  project={selectedProject}
-                  tasks={tasks.filter(t => t.projectId === selectedProject?.id)}
-                  activeTask={activeTask}
-                  timerRunning={timerRunning}
-                  elapsedSeconds={elapsedSeconds}
-                  formatTime={formatTime}
-                  onStartTask={handleStartTask}
-                  onStopTask={handleStopTask}
-                  onToggleFavorite={handleToggleFavorite}
-                  showAddTaskModal={showAddTaskModal}
-                  onOpenAddTaskModal={() => setShowAddTaskModal(true)}
-                  onCloseAddTaskModal={() => setShowAddTaskModal(false)}
-                  onAddTask={handleAddTask}
-                />
-              </motion.div>
-            )}
-
-            {currentScreen === 'settings' && (
-              <motion.div
-                key="settings"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full"
-              >
-                {console.log('RENDERING SettingsScreen')}
-                <SettingsScreen />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            </AnimatePresence>
+          </div>
 
           {showHeader && <Footer />}
         </div>

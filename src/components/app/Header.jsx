@@ -24,8 +24,7 @@ function Logo() {
 }
 
 export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onBackClick, onLogout, backButtonText = 'Back' }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (

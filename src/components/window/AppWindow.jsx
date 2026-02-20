@@ -5,8 +5,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
 export function AppWindow({ children }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-10 pt-7 pb-20">

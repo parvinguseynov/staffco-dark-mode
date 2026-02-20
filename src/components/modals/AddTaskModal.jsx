@@ -6,8 +6,7 @@ import { darkTheme, lightTheme } from '../../theme/colors';
 import { Button } from '../ui/Button';
 
 export function AddTaskModal({ isOpen, onClose, onAddTask, projects, selectedProjectId }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
   const [projectId, setProjectId] = useState(selectedProjectId || projects[0]?.id || 1);

@@ -3,8 +3,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
 export function Input({ label, type = 'text', placeholder, value, onChange, icon }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
 
   return (
     <div className="w-full">

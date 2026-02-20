@@ -16,8 +16,7 @@ export function UserDropdownMenu({
   currentCompany = 'Thinking IT',
   currentCompanyInitials = 'TI',
 }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
   const menuRef = useRef(null);
 
   // Close on outside click

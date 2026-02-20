@@ -20,10 +20,12 @@ export function ProjectDetailScreen({
   onCloseAddTaskModal,
   onAddTask,
 }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
 
-  if (!project) return null;
+  if (!project) {
+    console.error('ProjectDetailScreen: No project provided');
+    return <div style={{ padding: '20px', color: theme.app.textPrimary }}>Project not found</div>;
+  }
 
   // Calculate total time for this project
   const getTotalTime = (task) => {

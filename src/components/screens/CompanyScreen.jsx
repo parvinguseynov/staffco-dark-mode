@@ -12,8 +12,7 @@ const companies = [
 ];
 
 export function CompanyScreen({ onSelectCompany, onBackClick }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
 
   return (
     <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>

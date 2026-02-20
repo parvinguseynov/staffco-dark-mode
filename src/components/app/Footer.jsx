@@ -4,8 +4,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
 export function Footer() {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme } = useContext(ThemeContext);
 
   return (
     <div

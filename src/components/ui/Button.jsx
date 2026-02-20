@@ -4,8 +4,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
 export function Button({ children, variant = 'primary', onClick, className = '', icon, disabled = false, type = 'button' }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme, isDarkMode } = useContext(ThemeContext);
 
   const getStyles = () => {
     if (variant === 'primary') {

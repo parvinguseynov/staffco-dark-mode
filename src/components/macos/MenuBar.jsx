@@ -4,8 +4,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
 export function MenuBar() {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme, isDarkMode } = useContext(ThemeContext);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {

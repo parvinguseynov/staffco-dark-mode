@@ -5,8 +5,7 @@ import { darkTheme, lightTheme } from '../../theme/colors';
 import { Toggle } from '../ui/Toggle';
 
 export function SettingsScreen() {
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { isDarkMode, toggleTheme, theme } = useContext(ThemeContext);
   const [launchAtStartup, setLaunchAtStartup] = useState(true);
   const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
 

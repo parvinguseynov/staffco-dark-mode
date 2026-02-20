@@ -25,8 +25,7 @@ export function TasksScreen({
   onCloseAddTaskModal,
   onAddTask,
 }) {
-  const { isDarkMode } = useContext(ThemeContext);
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { theme, isDarkMode } = useContext(ThemeContext);
 
   // Sort tasks: favorites first, then others
   const sortedTasks = [...tasks].sort((a, b) => {

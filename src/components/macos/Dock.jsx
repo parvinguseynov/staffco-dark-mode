@@ -70,19 +70,14 @@ export function Dock({ onStaffCoClick }) {
               onClick={() => handleIconClick(app)}
               scale={getScale(index)}
             >
-              <div
-                className="w-full h-full rounded-xl flex items-center justify-center text-white font-bold shadow-lg cursor-pointer"
+              <img
+                src="/logo.png"
+                alt="StaffCo"
+                className="w-full h-full rounded-xl shadow-lg cursor-pointer"
                 style={{
-                  background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #06B6D4 100%)',
+                  objectFit: 'contain',
                 }}
-              >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 3h6v6H5V3z" fill="white" opacity="0.9" />
-                  <path d="M13 3h6v6h-6V3z" fill="white" opacity="0.7" />
-                  <path d="M5 13h6v6H5v-6z" fill="white" opacity="0.5" />
-                  <path d="M13 13h6v6h-6v-6z" fill="white" opacity="0.6" />
-                </svg>
-              </div>
+              />
             </DockIcon>
           );
         }

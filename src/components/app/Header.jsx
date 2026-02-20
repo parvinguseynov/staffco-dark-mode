@@ -7,17 +7,16 @@ import { UserDropdownMenu } from './UserDropdownMenu';
 function Logo() {
   return (
     <div className="flex items-center gap-2">
-      <div
-        className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm"
-        style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #06B6D4 100%)' }}
-      >
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-          <path d="M5 3h6v6H5V3z" fill="white" opacity="0.9" />
-          <path d="M13 3h6v6h-6V3z" fill="white" opacity="0.7" />
-          <path d="M5 13h6v6H5v-6z" fill="white" opacity="0.5" />
-          <path d="M13 13h6v6h-6v-6z" fill="white" opacity="0.6" />
-        </svg>
-      </div>
+      <img
+        src="/logo.png"
+        alt="StaffCo"
+        style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '8px',
+          objectFit: 'contain',
+        }}
+      />
       <span className="font-semibold">StaffCo</span>
     </div>
   );

@@ -201,19 +201,20 @@ function App() {
       <MenuBar />
 
       <AppWindow>
-        {showHeader && (
-          <Header
-            onSettingsClick={handleSettingsClick}
-            onUserAvatarClick={handleUserAvatarClick}
-            showBackButton={showBackButton}
-            onBackClick={handleBackClick}
-            onLogout={handleLogout}
-            backButtonText={getBackButtonText()}
-          />
-        )}
+        <div className="flex flex-col h-full">
+          {showHeader && (
+            <Header
+              onSettingsClick={handleSettingsClick}
+              onUserAvatarClick={handleUserAvatarClick}
+              showBackButton={showBackButton}
+              onBackClick={handleBackClick}
+              onLogout={handleLogout}
+              backButtonText={getBackButtonText()}
+            />
+          )}
 
-        <div className="flex-1 overflow-hidden">
-          <AnimatePresence mode="wait">
+          <div className="flex-1 overflow-hidden">
+            <AnimatePresence mode="wait">
             {currentScreen === 'login' && (
               <motion.div
                 key="login"
@@ -316,7 +317,8 @@ function App() {
           </AnimatePresence>
         </div>
 
-        {showHeader && <Footer />}
+          {showHeader && <Footer />}
+        </div>
       </AppWindow>
     </Desktop>
   );

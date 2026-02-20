@@ -11,7 +11,8 @@ export function SettingsScreen() {
   const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
 
   return (
-    <div className="flex flex-col h-full p-5" style={{ background: theme.app.windowBg }}>
+    <div className="flex flex-col h-full overflow-y-auto" style={{ background: theme.app.windowBg }}>
+      <div className="p-5">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-1" style={{ color: theme.app.textPrimary }}>
           Settings
@@ -82,6 +83,7 @@ export function SettingsScreen() {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -22,6 +22,24 @@ export function ProjectDetailScreen({
 }) {
   const { theme } = useContext(ThemeContext);
 
+  console.log('ProjectDetailScreen render:', {
+    projectExists: !!project,
+    project,
+    tasksCount: tasks?.length,
+    themeExists: !!theme,
+    themeApp: theme?.app,
+  });
+
+  if (!theme || !theme.app) {
+    console.error('ERROR: Theme or theme.app is undefined in ProjectDetailScreen!');
+    return (
+      <div style={{ padding: '20px', color: 'white', background: '#0F172A' }}>
+        <h2>Error: Theme not loaded</h2>
+        <pre>{JSON.stringify({ theme, project }, null, 2)}</pre>
+      </div>
+    );
+  }
+
   if (!project) {
     console.error('ProjectDetailScreen: No project provided');
     return <div style={{ padding: '20px', color: theme.app.textPrimary }}>Project not found</div>;

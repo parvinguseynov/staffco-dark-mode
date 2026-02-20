@@ -156,7 +156,12 @@ function App() {
   };
 
   const handleSettingsClick = () => {
+    console.log('=== NAVIGATING TO SETTINGS ===');
+    console.log('Current screen:', currentScreen);
+    console.log('Theme available:', !!theme);
+    console.log('Theme.app:', theme?.app);
     setCurrentScreen('settings');
+    console.log('Screen set to: settings');
   };
 
   const handleUserAvatarClick = () => {
@@ -180,8 +185,12 @@ function App() {
   };
 
   const handleProjectClick = (project) => {
+    console.log('=== NAVIGATING TO PROJECT DETAIL ===');
+    console.log('Project:', project);
+    console.log('Current screen:', currentScreen);
     setSelectedProject(project);
     setCurrentScreen('projectDetail');
+    console.log('Screen set to: projectDetail');
   };
 
   const handleLogout = () => {
@@ -334,6 +343,7 @@ function App() {
                 transition={{ duration: 0.2 }}
                 className="h-full"
               >
+                {console.log('RENDERING ProjectDetailScreen with project:', selectedProject)}
                 <ProjectDetailScreen
                   project={selectedProject}
                   tasks={tasks.filter(t => t.projectId === selectedProject?.id)}
@@ -361,6 +371,7 @@ function App() {
                 transition={{ duration: 0.2 }}
                 className="h-full"
               >
+                {console.log('RENDERING SettingsScreen')}
                 <SettingsScreen />
               </motion.div>
             )}

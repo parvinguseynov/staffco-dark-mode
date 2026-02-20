@@ -117,6 +117,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
         { key: 'accentRed', label: 'Danger (Red)', path: 'app.accentRed' },
         { key: 'accentOrange', label: 'Warning (Orange)', path: 'app.accentOrange' },
         { key: 'accentPurple', label: 'Purple', path: 'app.accentPurple' },
+        { key: 'accentActiveTask', label: 'Active Task', path: 'app.accentActiveTask' },
       ]
     }
   ];
@@ -148,6 +149,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
   --color-accent-red: ${colors.app.accentRed};
   --color-accent-orange: ${colors.app.accentOrange};
   --color-accent-purple: ${colors.app.accentPurple};
+  --color-accent-active-task: ${colors.app.accentActiveTask};
 }`;
     navigator.clipboard.writeText(css);
     setCopiedText('CSS');

@@ -28,6 +28,7 @@ export const darkTheme = {
     accentPurple: '#A78BFA',
     accentPink: '#F472B6',
     accentTeal: '#2DD4BF',
+    accentActiveTask: '#EF4444',
   }
 };
 
@@ -61,5 +62,6 @@ export const lightTheme = {
     accentPurple: '#8B5CF6',
     accentPink: '#EC4899',
     accentTeal: '#14B8A6',
+    accentActiveTask: '#EF4444',
   }
 };

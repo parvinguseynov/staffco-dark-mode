@@ -74,8 +74,8 @@ export function TasksScreen({
         <div
           className="mx-5 mt-5 p-5 rounded-2xl"
           style={{
-            background: `linear-gradient(135deg, ${isDarkMode ? 'rgba(239,68,68,0.15)' : 'rgba(239,68,68,0.1)'} 0%, ${isDarkMode ? 'rgba(239,68,68,0.05)' : 'rgba(239,68,68,0.05)'} 100%)`,
-            border: `1px solid ${isDarkMode ? 'rgba(239,68,68,0.2)' : 'rgba(239,68,68,0.3)'}`,
+            background: `linear-gradient(135deg, ${theme.app.accentActiveTask || '#EF4444'}${isDarkMode ? '26' : '1A'} 0%, ${theme.app.accentActiveTask || '#EF4444'}0D 100%)`,
+            border: `1px solid ${theme.app.accentActiveTask || '#EF4444'}${isDarkMode ? '33' : '4D'}`,
           }}
         >
           <div className="text-xs mb-1" style={{ color: theme.app.textMuted }}>Active task</div>

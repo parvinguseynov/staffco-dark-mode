@@ -23,7 +23,7 @@ function Logo() {
   );
 }
 
-export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onBackClick, onLogout }) {
+export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onBackClick, onLogout, backButtonText = 'Back' }) {
   const { isDarkMode } = useContext(ThemeContext);
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -42,7 +42,7 @@ export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onB
           className="flex items-center gap-2 text-sm hover:opacity-70 transition-opacity cursor-pointer"
           style={{ color: theme.app.textSecondary }}
         >
-          ← Back
+          ← {backButtonText}
         </button>
       ) : (
         <Logo />

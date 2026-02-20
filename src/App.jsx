@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Desktop } from './components/macos/Desktop';
 import { MenuBar } from './components/macos/MenuBar';
-import { Dock } from './components/macos/Dock';
 import { AppWindow } from './components/window/AppWindow';
 import { Header } from './components/app/Header';
 import { Footer } from './components/app/Footer';
@@ -165,12 +164,6 @@ function App() {
     }
   };
 
-  const handleDockStaffCoClick = () => {
-    if (currentScreen !== 'tasks') {
-      setCurrentScreen('tasks');
-    }
-  };
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -192,6 +185,14 @@ function App() {
   const showHeader = !['login', 'company'].includes(currentScreen);
   const showBackButton = ['settings', 'company', 'projectDetail'].includes(currentScreen);
 
+  // Back button text based on current screen
+  const getBackButtonText = () => {
+    if (currentScreen === 'projectDetail') return 'Back to Projects';
+    if (currentScreen === 'settings') return 'Back';
+    if (currentScreen === 'company') return 'Back';
+    return 'Back';
+  };
+
   // Get active task object
   const activeTask = activeTaskId ? tasks.find(t => t.id === activeTaskId) : null;
 
@@ -207,6 +208,7 @@ function App() {
             showBackButton={showBackButton}
             onBackClick={handleBackClick}
             onLogout={handleLogout}
+            backButtonText={getBackButtonText()}
           />
         )}
 
@@ -316,8 +318,6 @@ function App() {
 
         {showHeader && <Footer />}
       </AppWindow>
-
-      <Dock onStaffCoClick={handleDockStaffCoClick} />
     </Desktop>
   );
 }

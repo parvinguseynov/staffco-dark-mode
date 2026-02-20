@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Desktop } from './components/macos/Desktop';
 import { MenuBar } from './components/macos/MenuBar';
@@ -10,8 +10,14 @@ import { SettingsScreen } from './components/screens/SettingsScreen';
 import { LoginScreen } from './components/screens/LoginScreen';
 import { CompanyScreen } from './components/screens/CompanyScreen';
 import { ProjectDetailScreen } from './components/screens/ProjectDetailScreen';
+import DesignSystemPanel from './components/DesignSystemPanel';
+import { ThemeContext } from './context/ThemeContext';
+import { darkTheme, lightTheme } from './theme/colors';
 
 function App() {
+  // Get theme context
+  const { isDarkMode, toggleTheme: contextToggleTheme, theme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
+
   // Navigation state
   const [currentScreen, setCurrentScreen] = useState('tasks');
   const [activeTab, setActiveTab] = useState('tasks');
@@ -320,6 +326,15 @@ function App() {
           {showHeader && <Footer />}
         </div>
       </AppWindow>
+
+      {/* Design System Panel */}
+      <DesignSystemPanel
+        colors={theme}
+        setColors={setCustomColors}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={contextToggleTheme}
+        onReset={resetToDefaultTheme}
+      />
     </Desktop>
   );
 }

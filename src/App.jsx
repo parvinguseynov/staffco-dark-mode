@@ -11,6 +11,7 @@ import { LoginScreen } from './components/screens/LoginScreen';
 import { CompanyScreen } from './components/screens/CompanyScreen';
 import { ProjectDetailScreen } from './components/screens/ProjectDetailScreen';
 import DesignSystemPanel from './components/DesignSystemPanel';
+import { DevModeOverlay } from './components/DevModeOverlay';
 import { ThemeContext } from './context/ThemeContext';
 import { darkTheme, lightTheme } from './theme/colors';
 
@@ -48,6 +49,10 @@ function App() {
   const [activeTab, setActiveTab] = useState('tasks');
   const [selectedProject, setSelectedProject] = useState(null);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+
+  // Developer Mode state
+  const [devMode, setDevMode] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   // Initialize tasks from localStorage or defaults
   const [tasks, setTasks] = useState(() => {
@@ -252,6 +257,11 @@ function App() {
     console.log('✅ Demo reset complete');
   };
 
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(null), 2000);
+  };
+
   const showHeader = !['login', 'company'].includes(currentScreen);
   const showBackButton = ['settings', 'company', 'projectDetail'].includes(currentScreen);
 
@@ -401,7 +411,34 @@ function App() {
         setIsDarkMode={contextToggleTheme}
         onReset={resetToDefaultTheme}
         onResetDemo={handleResetDemo}
+        devMode={devMode}
+        setDevMode={setDevMode}
       />
+
+      {/* Developer Mode Overlay */}
+      <DevModeOverlay enabled={devMode} onNotification={showNotification} />
+
+      {/* Notification Toast */}
+      {notification && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#10B981',
+            color: 'white',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '500',
+            zIndex: 10000,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          }}
+        >
+          ✓ {notification}
+        </div>
+      )}
     </Desktop>
   );
 }

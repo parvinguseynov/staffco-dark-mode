@@ -87,7 +87,7 @@ const ColorPicker = ({ label, value, onChange, isDarkMode }) => {
   );
 };
 
-const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset, onResetDemo }) => {
+const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset, onResetDemo, devMode, setDevMode }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [copiedText, setCopiedText] = useState(null);
 
@@ -265,7 +265,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
               padding: '12px 16px',
               background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
               borderRadius: '12px',
-              marginBottom: '24px',
+              marginBottom: '16px',
             }}>
               <span style={{
                 fontSize: '14px',
@@ -309,6 +309,71 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
                   }}
                 >
                   🌙 Dark
+                </button>
+              </div>
+            </div>
+
+            {/* Developer Mode Toggle */}
+            <div
+              style={{
+                padding: '16px',
+                marginBottom: '24px',
+                borderRadius: '12px',
+                background: devMode
+                  ? 'rgba(167, 139, 250, 0.2)'
+                  : (isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'),
+                border: `1px solid ${devMode ? '#A78BFA' : (isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)')}`,
+              }}
+            >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '8px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '18px' }}>🛠️</span>
+                  <div>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      color: isDarkMode ? '#F1F5F9' : '#1E293B',
+                    }}>
+                      Developer Mode
+                    </div>
+                    <div style={{
+                      fontSize: '11px',
+                      color: isDarkMode ? '#64748B' : '#94A3B8',
+                      marginTop: '2px',
+                    }}>
+                      Show spacing & specs on hover
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setDevMode(!devMode)}
+                  style={{
+                    width: '48px',
+                    height: '28px',
+                    borderRadius: '14px',
+                    border: 'none',
+                    background: devMode ? '#A78BFA' : (isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'),
+                    cursor: 'pointer',
+                    position: 'relative',
+                    transition: 'background 0.2s',
+                  }}
+                >
+                  <div style={{
+                    width: '22px',
+                    height: '22px',
+                    borderRadius: '50%',
+                    background: 'white',
+                    position: 'absolute',
+                    top: '3px',
+                    left: devMode ? '23px' : '3px',
+                    transition: 'left 0.2s',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                  }} />
                 </button>
               </div>
             </div>

@@ -161,6 +161,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
       {/* Toggle Button (when panel is closed) */}
       {!isPanelOpen && (
         <motion.button
+          data-design-panel="true"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => setIsPanelOpen(true)}
@@ -181,7 +182,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '20px',
-            zIndex: 100,
+            zIndex: 10001,
             boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
           }}
         >
@@ -193,6 +194,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
       <AnimatePresence>
         {isPanelOpen && (
           <motion.div
+            data-design-panel="true"
             initial={{ x: 320, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 320, opacity: 0 }}
@@ -208,7 +210,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
                 : 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(20px)',
               borderLeft: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
-              zIndex: 50,
+              zIndex: 10001,
               overflowY: 'auto',
               padding: '20px',
             }}

@@ -8,10 +8,19 @@ export function DevModeOverlay({ enabled, onNotification }) {
   useEffect(() => {
     if (!enabled) {
       setHoveredElement(null);
+      setElementSpecs(null);
       return;
     }
 
     const handleMouseMove = (e) => {
+      // Check if hovering over Design System Panel or its children
+      const designPanel = document.querySelector('[data-design-panel]');
+      if (designPanel && designPanel.contains(e.target)) {
+        setHoveredElement(null);
+        setElementSpecs(null);
+        return;
+      }
+
       const element = document.elementFromPoint(e.clientX, e.clientY);
       if (element && element !== hoveredElement) {
         setHoveredElement(element);
@@ -58,6 +67,12 @@ export function DevModeOverlay({ enabled, onNotification }) {
     };
 
     const handleClick = (e) => {
+      // Don't intercept clicks on Design System Panel - let them through normally
+      const designPanel = document.querySelector('[data-design-panel]');
+      if (designPanel && designPanel.contains(e.target)) {
+        return;
+      }
+
       if (enabled && elementSpecs) {
         e.preventDefault();
         e.stopPropagation();
@@ -149,7 +164,7 @@ line-height: ${specs.lineHeight};`;
           fontSize: '11px',
           fontFamily: 'Monaco, Consolas, monospace',
           color: '#E0E0E0',
-          zIndex: 9999,
+          zIndex: 10000,
           pointerEvents: 'none',
           maxWidth: '300px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.5)',

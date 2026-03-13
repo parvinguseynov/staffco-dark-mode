@@ -29,6 +29,40 @@ export const darkTheme = {
     accentPink: '#F472B6',
     accentTeal: '#2DD4BF',
     accentActiveTask: '#EF4444',
+
+    // Gradient Definitions
+    gradients: {
+      // Button gradients
+      blue: 'linear-gradient(135deg, #60A5FA, #3B82F6)',
+      green: 'linear-gradient(135deg, #34D399, #10B981)',
+      red: 'linear-gradient(135deg, #F87171, #EF4444)',
+      orange: 'linear-gradient(135deg, #FBBF24, #F59E0B)',
+      purple: 'linear-gradient(135deg, #A78BFA, #8B5CF6)',
+
+      // Accent lines (for modal tops)
+      blueAccent: 'linear-gradient(90deg, #60A5FA, #3B82F6, #60A5FA)',
+      greenAccent: 'linear-gradient(90deg, #34D399, #10B981, #34D399)',
+      redAccent: 'linear-gradient(90deg, #F87171, #EF4444, #F87171)',
+      orangeAccent: 'linear-gradient(90deg, #FBBF24, #F59E0B, #FBBF24)',
+      purpleAccent: 'linear-gradient(90deg, #A78BFA, #8B5CF6, #A78BFA)',
+
+      // Card backgrounds
+      cardGlass: 'linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9))',
+      modalGlass: 'linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98))',
+    },
+
+    // Shadow Definitions
+    shadows: {
+      button: '0 4px 15px rgba(96, 165, 250, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+      buttonGreen: '0 4px 15px rgba(52, 211, 153, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+      buttonRed: '0 4px 15px rgba(248, 113, 113, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+      card: '0 0 0 1px rgba(255, 255, 255, 0.03), 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.15)',
+      modal: '0 0 0 1px rgba(255, 255, 255, 0.05), 0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+      glow: '0 0 30px rgba(96, 165, 250, 0.3)',
+      glowGreen: '0 0 30px rgba(52, 211, 153, 0.3)',
+      glowRed: '0 0 30px rgba(248, 113, 113, 0.3)',
+      glowOrange: '0 0 30px rgba(251, 191, 36, 0.3)',
+    },
   }
 };
 
@@ -63,5 +97,39 @@ export const lightTheme = {
     accentPink: '#EC4899',
     accentTeal: '#14B8A6',
     accentActiveTask: '#EF4444',
+
+    // Gradient Definitions
+    gradients: {
+      // Button gradients
+      blue: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+      green: 'linear-gradient(135deg, #10B981, #059669)',
+      red: 'linear-gradient(135deg, #EF4444, #DC2626)',
+      orange: 'linear-gradient(135deg, #F59E0B, #D97706)',
+      purple: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+
+      // Accent lines (for modal tops)
+      blueAccent: 'linear-gradient(90deg, #3B82F6, #2563EB, #3B82F6)',
+      greenAccent: 'linear-gradient(90deg, #10B981, #059669, #10B981)',
+      redAccent: 'linear-gradient(90deg, #EF4444, #DC2626, #EF4444)',
+      orangeAccent: 'linear-gradient(90deg, #F59E0B, #D97706, #F59E0B)',
+      purpleAccent: 'linear-gradient(90deg, #8B5CF6, #7C3AED, #8B5CF6)',
+
+      // Card backgrounds
+      cardGlass: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.95))',
+      modalGlass: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.98))',
+    },
+
+    // Shadow Definitions
+    shadows: {
+      button: '0 4px 15px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+      buttonGreen: '0 4px 15px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+      buttonRed: '0 4px 15px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
+      card: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.08)',
+      modal: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+      glow: '0 0 30px rgba(59, 130, 246, 0.3)',
+      glowGreen: '0 0 30px rgba(16, 185, 129, 0.3)',
+      glowRed: '0 0 30px rgba(239, 68, 68, 0.3)',
+      glowOrange: '0 0 30px rgba(245, 158, 11, 0.3)',
+    },
   }
 };

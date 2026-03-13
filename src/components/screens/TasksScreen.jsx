@@ -73,53 +73,93 @@ export function TasksScreen({
     <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>
       {/* Active Task Card */}
       {activeTask ? (
-        <div
-          className="mx-5 mt-5 p-5 rounded-2xl"
+        <motion.div
+          animate={{
+            boxShadow: [
+              '0 0 0 0 rgba(239, 68, 68, 0.4)',
+              '0 0 0 10px rgba(239, 68, 68, 0)',
+            ]
+          }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="mx-5 mt-5 p-5 rounded-2xl relative"
           style={{
-            background: `linear-gradient(135deg, ${theme.app.accentActiveTask || '#EF4444'}${isDarkMode ? '26' : '1A'} 0%, ${theme.app.accentActiveTask || '#EF4444'}0D 100%)`,
-            border: `1px solid ${theme.app.accentActiveTask || '#EF4444'}${isDarkMode ? '33' : '4D'}`,
+            background: theme.app.gradients.cardGlass,
+            border: `1px solid ${theme.app.accentActiveTask}33`,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            boxShadow: theme.app.shadows.glowRed,
           }}
         >
-          <div className="text-xs mb-1" style={{ color: theme.app.textMuted }}>Active task</div>
-          <div className="text-base font-medium mb-2" style={{ color: theme.app.textPrimary }}>
+          {/* Gradient accent line at top */}
+          <div
+            className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
+            style={{
+              background: theme.app.gradients.redAccent,
+            }}
+          />
+
+          <div className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: theme.app.accentActiveTask, letterSpacing: '0.5px' }}>
+            Active task
+          </div>
+          <div className="text-lg font-bold mb-3" style={{ color: theme.app.textPrimary }}>
             {activeTask.name}
           </div>
           <div className="flex items-center justify-between">
             <div
-              className="px-3 py-1 rounded-full text-xs flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5"
               style={{
-                background: isDarkMode ? 'rgba(52,211,153,0.15)' : 'rgba(16,185,129,0.1)',
-                border: `1px solid ${isDarkMode ? 'rgba(52,211,153,0.3)' : 'rgba(16,185,129,0.3)'}`,
+                background: 'rgba(52,211,153,0.15)',
+                border: '1px solid rgba(52,211,153,0.3)',
                 color: theme.app.accentGreen,
               }}
             >
-              <div className="w-1.5 h-1.5 rounded-full" style={{ background: theme.app.accentGreen }} />
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: theme.app.accentGreen }}
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
               {activeTask.project}
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-2xl font-semibold tabular-nums" style={{ color: theme.app.textPrimary }}>
+                <div className="text-3xl font-bold tabular-nums" style={{ color: theme.app.textPrimary }}>
                   {formatTime(elapsedSeconds)}
                 </div>
-                <div className="text-xs" style={{ color: theme.app.textMuted }}>
+                <div className="text-xs font-medium" style={{ color: theme.app.textSecondary }}>
                   Total: {getTotalTime(activeTask)}
                 </div>
               </div>
               <Tooltip text="Stop tracking" position="bottom">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={onStopTask}
-                  className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-90 transition-opacity"
-                  style={{ background: theme.app.accentRed, color: 'white' }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{
+                    background: theme.app.gradients.red,
+                    color: 'white',
+                    boxShadow: theme.app.shadows.buttonRed,
+                  }}
                 >
-                  <Pause width={16} height={16} />
-                </button>
+                  <Pause width={18} height={18} />
+                </motion.button>
               </Tooltip>
             </div>
           </div>
-        </div>
+        </motion.div>
       ) : (
-        <div className="mx-5 mt-5 p-5 rounded-2xl" style={{ background: theme.app.cardBg, border: `1px solid ${theme.app.border}` }}>
-          <div className="text-sm font-medium mb-1" style={{ color: theme.app.textSecondary }}>No active task</div>
+        <div
+          className="mx-5 mt-5 p-5 rounded-2xl"
+          style={{
+            background: theme.app.gradients.cardGlass,
+            border: `1px solid ${theme.app.border}`,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            boxShadow: theme.app.shadows.card,
+          }}
+        >
+          <div className="text-sm font-semibold mb-1" style={{ color: theme.app.textSecondary }}>No active task</div>
           <div className="text-xs" style={{ color: theme.app.textMuted }}>Select a task to begin</div>
         </div>
       )}
@@ -182,12 +222,15 @@ export function TasksScreen({
               <motion.div
                 key={task.id}
                 layout
-                whileHover={{ x: 2, scale: 1.01 }}
-                transition={{ type: 'spring', stiffness: 500, damping: 30, hover: { duration: 0.15 } }}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
                 className="flex items-center gap-3 p-3.5 rounded-xl transition-all cursor-pointer"
                 style={{
-                  background: theme.app.cardBg,
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                  background: theme.app.gradients.cardGlass,
+                  border: `1px solid ${theme.app.border}`,
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  boxShadow: theme.app.shadows.card,
                 }}
               >
                 <Tooltip text={task.isFavorite ? "Remove from favorites" : "Add to favorites"} position="top">
@@ -275,13 +318,16 @@ export function TasksScreen({
               <motion.div
                 key={project.id}
                 layout
-                whileHover={{ x: 2, scale: 1.01 }}
-                transition={{ type: 'spring', stiffness: 500, damping: 30, hover: { duration: 0.15 } }}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
                 onClick={() => onProjectClick(project)}
                 className="flex items-center gap-3 p-3.5 rounded-xl transition-all cursor-pointer"
                 style={{
-                  background: theme.app.cardBg,
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                  background: theme.app.gradients.cardGlass,
+                  border: `1px solid ${theme.app.border}`,
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  boxShadow: theme.app.shadows.card,
                 }}
               >
                 <Tooltip text={project.isFavorite ? "Remove from favorites" : "Add to favorites"} position="top">

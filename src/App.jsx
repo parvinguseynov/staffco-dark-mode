@@ -12,16 +12,16 @@ import { DevModeOverlay } from './components/DevModeOverlay';
 
 // Initial data constants for reset functionality
 const initialTasks = [
-  { id: 1, name: 'UX/UI Improvements...', project: 'StaffCo', projectId: 1, seconds: 1805, isFavorite: false },
-  { id: 2, name: 'General - StaffCo', project: 'StaffCo', projectId: 1, seconds: 2160, isFavorite: false },
-  { id: 3, name: 'Meetings & Communication', project: 'StaffCo', projectId: 1, seconds: 4868, isFavorite: false },
-  { id: 4, name: 'TimeOff - New Feature...', project: 'StaffCo', projectId: 1, seconds: 67, isFavorite: false },
+  { id: 1, name: 'UX/UI Improvements...', project: 'Website Redesign', projectId: 1, seconds: 1805, isFavorite: false },
+  { id: 2, name: 'General - Development', project: 'Website Redesign', projectId: 1, seconds: 2160, isFavorite: false },
+  { id: 3, name: 'Meetings & Communication', project: 'Website Redesign', projectId: 1, seconds: 4868, isFavorite: false },
+  { id: 4, name: 'TimeOff - New Feature...', project: 'Mobile App', projectId: 2, seconds: 67, isFavorite: false },
 ];
 
 const initialProjects = [
-  { id: 1, name: 'StaffCo', color: '#34D399', initials: 'S', isFavorite: false },
-  { id: 2, name: 'Paid Time Off (Only HR...', color: '#A78BFA', initials: 'P', isFavorite: false },
-  { id: 3, name: 'BP - BitPlay', color: '#F472B6', initials: 'B', isFavorite: false },
+  { id: 1, name: 'Website Redesign', color: '#075BEC', initials: 'W', isFavorite: false },
+  { id: 2, name: 'Mobile App', color: '#8A3AFB', initials: 'M', isFavorite: false },
+  { id: 3, name: 'Marketing Campaign', color: '#00EFD3', initials: 'MC', isFavorite: false },
 ];
 
 function AppContent() {
@@ -179,7 +179,7 @@ function AppContent() {
     const newTask = {
       id: Date.now(),
       name: taskData.name,
-      project: projects.find(p => p.id === taskData.projectId)?.name || 'StaffCo',
+      project: projects.find(p => p.id === taskData.projectId)?.name || 'Website Redesign',
       projectId: taskData.projectId,
       seconds: 0,
       isFavorite: false,

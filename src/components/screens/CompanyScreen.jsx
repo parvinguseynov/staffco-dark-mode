@@ -4,7 +4,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 
 const companies = [
-  { id: 1, name: 'StaffCo LLC', initials: '🔷', role: 'Owner', active: false },
+  { id: 1, name: 'talyvn Inc', initials: '🔷', role: 'Owner', active: false },
   { id: 2, name: 'Random', initials: '⊞', role: 'Owner', active: false },
   { id: 3, name: 'W7', initials: '⊞', role: 'Owner', active: false },
   { id: 4, name: 'Thinking IT', initials: 'TI', role: 'Owner', active: true },

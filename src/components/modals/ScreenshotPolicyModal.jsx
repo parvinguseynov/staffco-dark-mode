@@ -81,7 +81,7 @@ export function ScreenshotPolicyModal({ isOpen, onAccept }) {
             className="text-sm text-center mb-6"
             style={{ color: '#94A3B8', lineHeight: '1.6' }}
           >
-            StaffCo periodically captures screenshots (every 5–30 mins) to track productivity. Screenshots are securely stored and only visible to authorized managers.
+            talyvn periodically captures screenshots (every 5–30 mins) to track productivity. Screenshots are securely stored and only visible to authorized managers.
           </motion.p>
 
           <motion.button

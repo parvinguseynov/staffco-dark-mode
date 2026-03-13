@@ -8,7 +8,7 @@ export const darkTheme = {
     dockBorder: 'rgba(255, 255, 255, 0.12)',
   },
 
-  // StaffCo App
+  // talyvn App
   app: {
     // Backgrounds - deeper, richer blacks
     windowBg: '#0A0E17',
@@ -104,7 +104,7 @@ export const lightTheme = {
     dockBorder: 'rgba(0, 0, 0, 0.08)',
   },
 
-  // StaffCo App
+  // talyvn App
   app: {
     // Backgrounds - clean, bright
     windowBg: '#FFFFFF',

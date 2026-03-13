@@ -1,8 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
+import { Clock } from 'iconoir-react';
 import { ThemeContext } from '../../context/ThemeContext';
 
-export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }) {
+export function IdlePromptWithDuration({
+  isOpen,
+  onResume,
+  onBreak,
+  idleDuration = '1h 32m',
+  countdownSeconds = 60
+}) {
   const { theme } = useContext(ThemeContext);
   const [timeLeft, setTimeLeft] = useState(countdownSeconds);
 
@@ -11,7 +18,6 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
       setTimeLeft(countdownSeconds);
       return;
     }
-
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -22,7 +28,6 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, [isOpen, countdownSeconds, onBreak]);
 
@@ -65,7 +70,7 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
           boxShadow: `
             0 0 0 1px rgba(255, 255, 255, 0.05),
             0 25px 50px -12px rgba(0, 0, 0, 0.5),
-            0 0 100px rgba(52, 211, 153, 0.1)
+            0 0 100px rgba(96, 165, 250, 0.1)
           `,
         }}
       >
@@ -73,7 +78,7 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
         <div
           className="h-1 w-full"
           style={{
-            background: 'linear-gradient(90deg, #34D399, #10B981, #34D399)',
+            background: 'linear-gradient(90deg, #F87171, #FBBF24, #F87171)',
           }}
         />
 
@@ -86,31 +91,52 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
             className="text-xl font-bold text-center mb-2"
             style={{ color: '#F1F5F9' }}
           >
-            Ready to resume?
+            You've been idle
           </motion.h3>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
-            className="text-sm text-center mb-8"
+            className="text-sm text-center mb-6"
             style={{ color: '#94A3B8' }}
           >
             Do you want to resume tracking or continue your break?
           </motion.p>
 
+          {/* Idle Duration Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex items-center justify-center gap-2 mb-6"
+          >
+            <div
+              className="flex items-center gap-2 px-4 py-2 rounded-full"
+              style={{
+                background: 'rgba(251, 191, 36, 0.15)',
+                border: '1px solid rgba(251, 191, 36, 0.3)',
+              }}
+            >
+              <Clock width={16} height={16} style={{ color: '#FBBF24' }} />
+              <span className="text-sm font-medium" style={{ color: '#FBBF24' }}>
+                Idle duration: {idleDuration}
+              </span>
+            </div>
+          </motion.div>
+
           {/* Circular Timer */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring' }}
+            transition={{ delay: 0.25, type: 'spring' }}
             className="relative w-36 h-36 mx-auto mb-8"
           >
             {/* Glow effect */}
             <div
               className="absolute inset-0 rounded-full"
               style={{
-                background: `radial-gradient(circle, rgba(52, 211, 153, 0.2) 0%, transparent 70%)`,
+                background: `radial-gradient(circle, rgba(248, 113, 113, 0.2) 0%, transparent 70%)`,
                 filter: 'blur(20px)',
               }}
             />
@@ -127,9 +153,9 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
               />
               {/* Progress circle with gradient */}
               <defs>
-                <linearGradient id="timerGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#34D399" />
-                  <stop offset="100%" stopColor="#10B981" />
+                <linearGradient id="timerGradientDuration" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#F87171" />
+                  <stop offset="100%" stopColor="#FBBF24" />
                 </linearGradient>
               </defs>
               <circle
@@ -137,14 +163,14 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
                 cy="60"
                 r="52"
                 fill="none"
-                stroke="url(#timerGradient2)"
+                stroke="url(#timerGradientDuration)"
                 strokeWidth="8"
                 strokeLinecap="round"
                 strokeDasharray={circumference}
                 strokeDashoffset={circumference - (progress / 100) * circumference}
                 style={{
                   transition: 'stroke-dashoffset 1s linear',
-                  filter: 'drop-shadow(0 0 8px rgba(52, 211, 153, 0.5))',
+                  filter: 'drop-shadow(0 0 8px rgba(248, 113, 113, 0.5))',
                 }}
               />
             </svg>
@@ -186,7 +212,7 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
               Start working again
             </motion.button>
 
-            {/* Secondary button - Continue Break */}
+            {/* Secondary button - Break */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -199,8 +225,7 @@ export function IdlePrompt2({ isOpen, onResume, onBreak, countdownSeconds = 60 }
               }}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
+                <path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
               </svg>
               I'm on a break
             </motion.button>

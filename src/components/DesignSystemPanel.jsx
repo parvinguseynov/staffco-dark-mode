@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IdlePrompt1 } from './modals/IdlePrompt1';
 import { IdlePrompt2 } from './modals/IdlePrompt2';
+import { IdlePromptWithDuration } from './modals/IdlePromptWithDuration';
 import { ActiveTaskLogoutModal } from './modals/ActiveTaskLogoutModal';
 import { LogoutModal } from './modals/LogoutModal';
 import { UpdateAvailableModal } from './modals/UpdateAvailableModal';
@@ -102,6 +103,7 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
   // Modal states
   const [showIdlePrompt1, setShowIdlePrompt1] = useState(false);
   const [showIdlePrompt2, setShowIdlePrompt2] = useState(false);
+  const [showIdleWithDuration, setShowIdleWithDuration] = useState(false);
   const [showActiveTaskLogout, setShowActiveTaskLogout] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -477,6 +479,22 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
                 </button>
 
                 <button
+                  onClick={() => setShowIdleWithDuration(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Idle with Duration
+                </button>
+
+                <button
                   onClick={() => setShowActiveTaskLogout(true)}
                   style={{
                     padding: '10px 12px',
@@ -712,6 +730,14 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
         isOpen={showIdlePrompt2}
         onResume={() => setShowIdlePrompt2(false)}
         onBreak={() => setShowIdlePrompt2(false)}
+        countdownSeconds={10}
+      />
+
+      <IdlePromptWithDuration
+        isOpen={showIdleWithDuration}
+        onResume={() => setShowIdleWithDuration(false)}
+        onBreak={() => setShowIdleWithDuration(false)}
+        idleDuration="1h 32m"
         countdownSeconds={10}
       />
 

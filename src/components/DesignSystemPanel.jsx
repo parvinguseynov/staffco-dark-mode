@@ -1,5 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { IdlePrompt1 } from './modals/IdlePrompt1';
+import { IdlePrompt2 } from './modals/IdlePrompt2';
+import { ActiveTaskLogoutModal } from './modals/ActiveTaskLogoutModal';
+import { LogoutModal } from './modals/LogoutModal';
+import { UpdateAvailableModal } from './modals/UpdateAvailableModal';
+import { ScreenshotPolicyModal } from './modals/ScreenshotPolicyModal';
+import { OfflineModal } from './modals/OfflineModal';
+import { DesktopTrackingModal } from './modals/DesktopTrackingModal';
 
 // Helper function to get nested object value
 const getNestedValue = (obj, path) => {
@@ -90,6 +98,16 @@ const ColorPicker = ({ label, value, onChange, isDarkMode }) => {
 const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset, onResetDemo, devMode, setDevMode }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [copiedText, setCopiedText] = useState(null);
+
+  // Modal states
+  const [showIdlePrompt1, setShowIdlePrompt1] = useState(false);
+  const [showIdlePrompt2, setShowIdlePrompt2] = useState(false);
+  const [showActiveTaskLogout, setShowActiveTaskLogout] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
+  const [showScreenshotPolicy, setShowScreenshotPolicy] = useState(false);
+  const [showOffline, setShowOffline] = useState(false);
+  const [showDesktopTracking, setShowDesktopTracking] = useState(false);
 
   const colorGroups = [
     {
@@ -408,6 +426,154 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
               </div>
             ))}
 
+            {/* Modal Demos */}
+            <div style={{
+              marginBottom: '24px',
+              paddingBottom: '24px',
+              borderBottom: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+            }}>
+              <h3 style={{
+                fontSize: '11px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                color: isDarkMode ? '#64748B' : '#94A3B8',
+                marginBottom: '12px',
+              }}>
+                Modal Demos
+              </h3>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <button
+                  onClick={() => setShowIdlePrompt1(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Idle Prompt 1 (Away)
+                </button>
+
+                <button
+                  onClick={() => setShowIdlePrompt2(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Idle Prompt 2 (Resume)
+                </button>
+
+                <button
+                  onClick={() => setShowActiveTaskLogout(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Active Task Logout Warning
+                </button>
+
+                <button
+                  onClick={() => setShowLogout(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Simple Logout Confirmation
+                </button>
+
+                <button
+                  onClick={() => setShowUpdate(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Update Available
+                </button>
+
+                <button
+                  onClick={() => setShowScreenshotPolicy(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Screenshot Policy
+                </button>
+
+                <button
+                  onClick={() => setShowOffline(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Working Offline
+                </button>
+
+                <button
+                  onClick={() => setShowDesktopTracking(true)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  Desktop Tracking
+                </button>
+              </div>
+            </div>
+
             {/* Action Buttons */}
             <div style={{
               display: 'flex',
@@ -533,6 +699,56 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Modal Components */}
+      <IdlePrompt1
+        isOpen={showIdlePrompt1}
+        onWorking={() => setShowIdlePrompt1(false)}
+        onBreak={() => setShowIdlePrompt1(false)}
+        countdownSeconds={10}
+      />
+
+      <IdlePrompt2
+        isOpen={showIdlePrompt2}
+        onResume={() => setShowIdlePrompt2(false)}
+        onBreak={() => setShowIdlePrompt2(false)}
+        countdownSeconds={10}
+      />
+
+      <ActiveTaskLogoutModal
+        isOpen={showActiveTaskLogout}
+        onStopAndLogout={() => setShowActiveTaskLogout(false)}
+        onCancel={() => setShowActiveTaskLogout(false)}
+        taskName="Design System Updates"
+      />
+
+      <LogoutModal
+        isOpen={showLogout}
+        onLogout={() => setShowLogout(false)}
+        onCancel={() => setShowLogout(false)}
+      />
+
+      <UpdateAvailableModal
+        isOpen={showUpdate}
+        version="2.2.0"
+        onUpdate={() => setShowUpdate(false)}
+        onLater={() => setShowUpdate(false)}
+      />
+
+      <ScreenshotPolicyModal
+        isOpen={showScreenshotPolicy}
+        onAccept={() => setShowScreenshotPolicy(false)}
+      />
+
+      <OfflineModal
+        isOpen={showOffline}
+        onReconnect={() => setShowOffline(false)}
+      />
+
+      <DesktopTrackingModal
+        isOpen={showDesktopTracking}
+        onOpenApp={() => setShowDesktopTracking(false)}
+      />
     </>
   );
 };

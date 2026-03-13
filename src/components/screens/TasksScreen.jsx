@@ -1,10 +1,12 @@
 import { useContext } from 'react';
-import { Search, Plus, Star, Info, Play, Pause } from 'lucide-react';
+import { Search, Plus, Star, StarSolid, InfoCircle, Play, Pause } from 'iconoir-react';
 import { motion } from 'framer-motion';
 import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
 import { Button } from '../ui/Button';
 import { AddTaskModal } from '../modals/AddTaskModal';
+import { Tooltip } from '../ui/Tooltip';
+import { TimeInfoPopup } from '../ui/TimeInfoPopup';
 
 export function TasksScreen({
   activeTab,
@@ -103,13 +105,15 @@ export function TasksScreen({
                   Total: {getTotalTime(activeTask)}
                 </div>
               </div>
-              <button
-                onClick={onStopTask}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-90 transition-opacity"
-                style={{ background: theme.app.accentRed, color: 'white' }}
-              >
-                <Pause size={16} fill="white" />
-              </button>
+              <Tooltip text="Stop tracking" position="bottom">
+                <button
+                  onClick={onStopTask}
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-90 transition-opacity"
+                  style={{ background: theme.app.accentRed, color: 'white' }}
+                >
+                  <Pause width={16} height={16} />
+                </button>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -148,7 +152,8 @@ export function TasksScreen({
       <div className="flex gap-2 px-5 mb-4">
         <div className="flex-1 relative">
           <Search
-            size={16}
+            width={16}
+            height={16}
             className="absolute left-3 top-1/2 transform -translate-y-1/2"
             style={{ color: theme.app.textMuted }}
           />
@@ -163,7 +168,7 @@ export function TasksScreen({
             }}
           />
         </div>
-        <Button icon={<Plus size={16} />} onClick={onOpenAddTaskModal}>
+        <Button icon={<Plus width={16} height={16} />} onClick={onOpenAddTaskModal}>
           Add {activeTab === 'tasks' ? 'task' : 'project'}
         </Button>
       </div>
@@ -185,19 +190,29 @@ export function TasksScreen({
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                 }}
               >
-                <motion.button
-                  onClick={() => onToggleFavorite(task.id)}
-                  className="cursor-pointer"
-                  whileTap={{ scale: 0.8 }}
-                  animate={task.isFavorite ? { scale: [1, 1.3, 1] } : {}}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Star
-                    size={16}
-                    style={{ color: task.isFavorite ? theme.app.accentOrange : theme.app.textMuted }}
-                    fill={task.isFavorite ? theme.app.accentOrange : 'none'}
-                  />
-                </motion.button>
+                <Tooltip text={task.isFavorite ? "Remove from favorites" : "Add to favorites"} position="top">
+                  <motion.button
+                    onClick={() => onToggleFavorite(task.id)}
+                    className="cursor-pointer"
+                    whileTap={{ scale: 0.8 }}
+                    animate={task.isFavorite ? { scale: [1, 1.3, 1] } : {}}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {task.isFavorite ? (
+                      <StarSolid
+                        width={16}
+                        height={16}
+                        style={{ color: theme.app.accentOrange }}
+                      />
+                    ) : (
+                      <Star
+                        width={16}
+                        height={16}
+                        style={{ color: theme.app.textMuted }}
+                      />
+                    )}
+                  </motion.button>
+                </Tooltip>
                 <div className="flex-1">
                   <div className="text-sm font-medium mb-1" style={{ color: theme.app.textPrimary }}>
                     {task.name}
@@ -213,7 +228,7 @@ export function TasksScreen({
                     {task.project}
                   </div>
                 </div>
-                <Info size={14} style={{ color: theme.app.textMuted }} />
+                <TimeInfoPopup task={task} />
                 {task.id === activeTask?.id ? (
                   <span
                     className="text-sm tabular-nums px-3 py-1.5 rounded-lg font-medium"
@@ -230,21 +245,25 @@ export function TasksScreen({
                   </span>
                 )}
                 {task.id === activeTask?.id ? (
-                  <button
-                    onClick={onStopTask}
-                    className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
-                    style={{ background: theme.app.accentRed, color: 'white' }}
-                  >
-                    <Pause size={14} fill="white" />
-                  </button>
+                  <Tooltip text="Stop tracking" position="left">
+                    <button
+                      onClick={onStopTask}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
+                      style={{ background: theme.app.accentRed, color: 'white' }}
+                    >
+                      <Pause width={14} height={14} />
+                    </button>
+                  </Tooltip>
                 ) : (
-                  <button
-                    onClick={() => onStartTask(task.id)}
-                    className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
-                    style={{ background: theme.app.accentBlue, color: 'white' }}
-                  >
-                    <Play size={14} fill="white" />
-                  </button>
+                  <Tooltip text="Start tracking" position="left">
+                    <button
+                      onClick={() => onStartTask(task.id)}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
+                      style={{ background: theme.app.accentBlue, color: 'white' }}
+                    >
+                      <Play width={14} height={14} />
+                    </button>
+                  </Tooltip>
                 )}
               </motion.div>
             ))}
@@ -265,19 +284,29 @@ export function TasksScreen({
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                 }}
               >
-                <motion.button
-                  onClick={(e) => { e.stopPropagation(); onToggleProjectFavorite(project.id); }}
-                  className="cursor-pointer"
-                  whileTap={{ scale: 0.8 }}
-                  animate={project.isFavorite ? { scale: [1, 1.3, 1] } : {}}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Star
-                    size={16}
-                    style={{ color: project.isFavorite ? theme.app.accentOrange : theme.app.textMuted }}
-                    fill={project.isFavorite ? theme.app.accentOrange : 'none'}
-                  />
-                </motion.button>
+                <Tooltip text={project.isFavorite ? "Remove from favorites" : "Add to favorites"} position="top">
+                  <motion.button
+                    onClick={(e) => { e.stopPropagation(); onToggleProjectFavorite(project.id); }}
+                    className="cursor-pointer"
+                    whileTap={{ scale: 0.8 }}
+                    animate={project.isFavorite ? { scale: [1, 1.3, 1] } : {}}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {project.isFavorite ? (
+                      <StarSolid
+                        width={16}
+                        height={16}
+                        style={{ color: theme.app.accentOrange }}
+                      />
+                    ) : (
+                      <Star
+                        width={16}
+                        height={16}
+                        style={{ color: theme.app.textMuted }}
+                      />
+                    )}
+                  </motion.button>
+                </Tooltip>
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-semibold text-sm"
                   style={{ background: project.color }}
@@ -292,7 +321,7 @@ export function TasksScreen({
                     {getProjectTaskCount(project.id)} tasks
                   </div>
                 </div>
-                <Info size={14} style={{ color: theme.app.textMuted }} />
+                <TimeInfoPopup task={task} />
                 <span className="text-sm tabular-nums" style={{ color: theme.app.textSecondary }}>
                   {getProjectTotalTime(project.id)}
                 </span>

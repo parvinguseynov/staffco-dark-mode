@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Play, Pause, Clock } from 'lucide-react';
+import { Play, Pause, Clock } from 'iconoir-react';
 
 export function TaskCard({ task, onToggleTimer }) {
   return (
@@ -22,7 +22,7 @@ export function TaskCard({ task, onToggleTimer }) {
               {task.project}
             </span>
             <span className="flex items-center gap-1 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-              <Clock size={14} />
+              <Clock width={14} height={14} />
               {task.duration}
             </span>
           </div>
@@ -39,7 +39,7 @@ export function TaskCard({ task, onToggleTimer }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {task.isRunning ? <Pause size={18} /> : <Play size={18} />}
+          {task.isRunning ? <Pause width={18} height={18} /> : <Play width={18} height={18} />}
         </motion.button>
       </div>
     </motion.div>

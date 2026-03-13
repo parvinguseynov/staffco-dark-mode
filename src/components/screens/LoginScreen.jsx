@@ -1,88 +1,111 @@
 import { useState, useContext } from 'react';
-import { Eye, Chrome } from 'lucide-react';
+import { OpenNewWindow } from 'iconoir-react';
 import { ThemeContext } from '../../context/ThemeContext';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
 
 export function LoginScreen({ onLogin }) {
-  const { theme, isDarkMode } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
   return (
-    <div className="flex flex-col h-full p-5" style={{ background: theme.app.windowBg, color: theme.app.textPrimary }}>
-      <div className="flex items-center justify-center mb-8">
+    <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col items-center justify-center px-8">
+        {/* Logo */}
         <img
-          src={isDarkMode ? "/white_logo.png" : "/logo.png"}
+          src="/white_logo.png"
           alt="StaffCo"
-          style={{
-            height: '40px',
-            width: 'auto',
-            objectFit: 'contain',
-          }}
+          className="h-10 mb-8"
         />
-      </div>
 
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold mb-2">Welcome to StaffCo</h1>
-        <p className="text-sm" style={{ color: theme.app.textSecondary }}>
-          Enter your email and password...
-        </p>
-      </div>
-
-      <div className="space-y-4 mb-4">
-        <Input
-          label="Email"
+        {/* Email field */}
+        <input
           type="email"
-          placeholder="Enter your email address"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full max-w-sm mb-3 px-4 py-3 rounded-xl text-sm outline-none transition-all"
+          style={{
+            background: theme.app.cardBg,
+            border: `1px solid ${theme.app.border}`,
+            color: theme.app.textPrimary,
+          }}
         />
-        <Input
-          label="Password"
+
+        {/* Password field */}
+        <input
           type="password"
-          placeholder="Enter your password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          icon={<Eye size={16} />}
+          className="w-full max-w-sm mb-4 px-4 py-3 rounded-xl text-sm outline-none transition-all"
+          style={{
+            background: theme.app.cardBg,
+            border: `1px solid ${theme.app.border}`,
+            color: theme.app.textPrimary,
+          }}
         />
-      </div>
 
-      <div className="flex items-center justify-between mb-4 text-sm">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-            className="w-4 h-4 rounded"
-          />
-          <span style={{ color: theme.app.textSecondary }}>Remember me</span>
-        </label>
-        <a href="#" style={{ color: theme.app.accentBlue }}>Forgot password?</a>
-      </div>
+        {/* Forgot password */}
+        <button
+          className="text-sm mb-6 hover:underline transition-all"
+          style={{ color: theme.app.accentBlue }}
+        >
+          Forgot password?
+        </button>
 
-      <Button onClick={onLogin} className="w-full mb-4">Sign in</Button>
+        {/* Sign in button */}
+        <button
+          onClick={onLogin}
+          className="w-full max-w-sm py-3 rounded-xl text-sm font-medium mb-4 transition-all hover:opacity-90"
+          style={{ background: theme.app.accentBlue, color: 'white' }}
+        >
+          Sign In
+        </button>
 
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t" style={{ borderColor: theme.app.border }} />
+        {/* Divider */}
+        <div className="flex items-center gap-3 w-full max-w-sm mb-4">
+          <div className="flex-1 h-px" style={{ background: theme.app.border }} />
+          <span className="text-xs" style={{ color: theme.app.textMuted }}>or</span>
+          <div className="flex-1 h-px" style={{ background: theme.app.border }} />
         </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="px-2" style={{ background: theme.app.windowBg, color: theme.app.textMuted }}>
-            Or login with
-          </span>
-        </div>
+
+        {/* Google Sign In */}
+        <button
+          onClick={onLogin}
+          className="w-full max-w-sm py-3 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all hover:opacity-90"
+          style={{
+            background: theme.app.cardBg,
+            color: theme.app.textPrimary,
+            border: `1px solid ${theme.app.border}`,
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M18 10.2c0-.6-.1-1.2-.2-1.8H10v3.4h4.5c-.2 1-.8 1.9-1.7 2.4v2.2h2.7c1.6-1.5 2.5-3.7 2.5-6.2z" fill="#4285F4"/>
+            <path d="M10 18c2.3 0 4.2-.8 5.6-2.1l-2.7-2.2c-.8.5-1.7.8-2.9.8-2.2 0-4.1-1.5-4.8-3.5H2.4v2.3C3.8 16 6.7 18 10 18z" fill="#34A853"/>
+            <path d="M5.2 11c-.2-.5-.3-1.1-.3-1.7s.1-1.2.3-1.7V5.3H2.4C1.5 6.9 1 8.4 1 10s.5 3.1 1.4 4.7l2.8-2.3z" fill="#FBBC05"/>
+            <path d="M10 4.2c1.2 0 2.3.4 3.2 1.2l2.4-2.4C14.2 1.6 12.3.8 10 .8 6.7.8 3.8 2.8 2.4 5.5l2.8 2.3C5.9 5.7 7.8 4.2 10 4.2z" fill="#EA4335"/>
+          </svg>
+          Sign in with Google
+        </button>
       </div>
 
-      <Button
-        variant="secondary"
-        className="w-full"
-        icon={<Chrome size={18} />}
-        onClick={onLogin}
+      {/* Footer */}
+      <div
+        className="flex items-center justify-between px-5 py-4 border-t"
+        style={{ borderColor: theme.app.border }}
       >
-        Google
-      </Button>
+        <span className="text-xs" style={{ color: theme.app.textMuted }}>
+          v2.1.0.3
+        </span>
+        <button
+          className="text-xs flex items-center gap-1 transition-all hover:opacity-80"
+          style={{ color: theme.app.accentBlue }}
+        >
+          Open Dashboard
+          <OpenNewWindow width={12} height={12} />
+        </button>
+      </div>
     </div>
   );
 }

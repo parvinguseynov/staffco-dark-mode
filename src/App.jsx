@@ -326,12 +326,13 @@ function AppContent() {
       {/* App Window */}
       <div
         style={{
-          width: '380px',
-          height: '667px',
-          borderRadius: '24px',
+          width: '100%',
+          maxWidth: '460px',
+          height: '820px',
+          borderRadius: '20px',
           overflow: 'hidden',
           background: theme?.app?.windowBg || '#111827',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.4)',
           border: `1px solid ${theme?.app?.border || '#334155'}`,
           display: 'flex',
           flexDirection: 'column',

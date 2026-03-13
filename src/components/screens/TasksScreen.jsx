@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Search, Plus, Star, StarSolid, InfoCircle, Play, Pause } from 'iconoir-react';
+import { Search, Plus, Star, StarSolid, InfoCircle, Play, Pause, NavArrowRight } from 'iconoir-react';
 import { motion } from 'framer-motion';
 import { ThemeContext } from '../../context/ThemeContext';
 import { darkTheme, lightTheme } from '../../theme/colors';
@@ -367,10 +367,10 @@ export function TasksScreen({
                     {getProjectTaskCount(project.id)} tasks
                   </div>
                 </div>
-                <TimeInfoPopup task={task} />
                 <span className="text-sm tabular-nums" style={{ color: theme.app.textSecondary }}>
                   {getProjectTotalTime(project.id)}
                 </span>
+                <NavArrowRight width={18} height={18} style={{ color: theme.app.textMuted }} />
               </motion.div>
             ))}
           </>

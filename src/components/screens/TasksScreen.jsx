@@ -189,28 +189,51 @@ export function TasksScreen({
       </div>
 
       {/* Search + Add Button */}
-      <div className="flex gap-2 px-5 mb-4">
-        <div className="flex-1 relative">
-          <Search
-            width={16}
-            height={16}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2"
-            style={{ color: theme.app.textMuted }}
-          />
-          <input
-            type="text"
-            placeholder={activeTab === 'tasks' ? 'Search by task' : 'Search by project'}
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm"
-            style={{
-              background: theme.app.cardBg,
-              border: `1px solid ${theme.app.border}`,
-              color: theme.app.textPrimary,
-            }}
-          />
-        </div>
-        <Button icon={<Plus width={16} height={16} />} onClick={onOpenAddTaskModal}>
-          Add {activeTab === 'tasks' ? 'task' : 'project'}
-        </Button>
+      <div className="px-5 mb-4">
+        {activeTab === 'tasks' ? (
+          <div className="flex gap-2">
+            <div className="flex-1 relative">
+              <Search
+                width={16}
+                height={16}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2"
+                style={{ color: theme.app.textMuted }}
+              />
+              <input
+                type="text"
+                placeholder="Search by task"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm"
+                style={{
+                  background: theme.app.cardBg,
+                  border: `1px solid ${theme.app.border}`,
+                  color: theme.app.textPrimary,
+                }}
+              />
+            </div>
+            <Button icon={<Plus width={16} height={16} />} onClick={onOpenAddTaskModal}>
+              Add task
+            </Button>
+          </div>
+        ) : (
+          <div className="relative">
+            <Search
+              width={16}
+              height={16}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2"
+              style={{ color: theme.app.textMuted }}
+            />
+            <input
+              type="text"
+              placeholder="Search projects"
+              className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm"
+              style={{
+                background: theme.app.cardBg,
+                border: `1px solid ${theme.app.border}`,
+                color: theme.app.textPrimary,
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Content - Tasks or Projects */}

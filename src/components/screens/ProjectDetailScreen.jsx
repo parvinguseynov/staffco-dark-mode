@@ -1,128 +1,149 @@
 import { useContext } from 'react';
-import { Search, Plus, Star, Info, Play, Pause } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Search, Plus, Star, StarSolid, Play, Pause } from 'iconoir-react';
 import { ThemeContext } from '../../context/ThemeContext';
-import { darkTheme, lightTheme } from '../../theme/colors';
-import { Button } from '../ui/Button';
-import { AddTaskModal } from '../modals/AddTaskModal';
+import { TimeInfoPopup } from '../ui/TimeInfoPopup';
+import { Tooltip } from '../ui/Tooltip';
 
 export function ProjectDetailScreen({
   project,
-  tasks,
+  tasks = [],
   activeTask,
-  timerRunning,
   elapsedSeconds,
   formatTime,
   onStartTask,
   onStopTask,
   onToggleFavorite,
-  showAddTaskModal,
   onOpenAddTaskModal,
-  onCloseAddTaskModal,
-  onAddTask,
 }) {
   const { theme } = useContext(ThemeContext);
 
-  console.log('ProjectDetailScreen render:', {
-    projectExists: !!project,
-    project,
-    tasksCount: tasks?.length,
-    themeExists: !!theme,
-    themeApp: theme?.app,
-  });
-
+  // Safety check
   if (!project) {
-    console.error('ProjectDetailScreen: No project provided');
-    return <div style={{ padding: '20px', color: theme?.app?.textPrimary || '#F1F5F9' }}>Project not found</div>;
+    return (
+      <div className="flex items-center justify-center h-full" style={{ color: theme.app.textMuted }}>
+        Project not found
+      </div>
+    );
   }
 
-  // Calculate total time for this project
+  // Filter tasks for this project
+  const projectTasks = tasks.filter(t => t.projectId === project.id);
+
+  // Sort: favorites first
+  const sortedTasks = [...projectTasks].sort((a, b) => {
+    if (a.isFavorite && !b.isFavorite) return -1;
+    if (!a.isFavorite && b.isFavorite) return 1;
+    return 0;
+  });
+
   const getTotalTime = (task) => {
-    if (!task) return '00:00:00';
     const totalSeconds = task.id === activeTask?.id
       ? task.seconds + elapsedSeconds
       : task.seconds;
     return formatTime(totalSeconds);
   };
 
-  const projectTotalSeconds = tasks.reduce((sum, task) => {
-    const taskSeconds = task.id === activeTask?.id
-      ? task.seconds + elapsedSeconds
-      : task.seconds;
-    return sum + taskSeconds;
-  }, 0);
-
   return (
     <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>
-      {/* Project Header */}
-      <div className="px-5 pt-5 pb-4" style={{ borderBottom: `1px solid ${theme.app.border}` }}>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-semibold text-lg"
-            style={{ background: project.color }}
-          >
-            {project.initials}
-          </div>
-          <div>
-            <h1 className="text-lg font-bold" style={{ color: theme.app.textPrimary }}>
-              {project.name}
-            </h1>
-            <p className="text-xs" style={{ color: theme.app.textSecondary }}>
-              {tasks.length} tasks · {formatTime(projectTotalSeconds)} total
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Search + Add Task */}
-      <div className="flex gap-2 px-5 py-4">
-        <div className="flex-1 relative">
-          <Search
-            size={16}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2"
-            style={{ color: theme.app.textMuted }}
-          />
+      <div className="flex gap-3 px-5 py-4">
+        <div
+          className="flex-1 flex items-center gap-2 px-4 py-3 rounded-xl"
+          style={{
+            background: theme.app.cardBg,
+            border: `1px solid ${theme.app.border}`,
+          }}
+        >
+          <Search width={18} height={18} style={{ color: theme.app.textMuted }} />
           <input
             type="text"
-            placeholder="Search tasks"
-            className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm"
-            style={{
-              background: theme.app.cardBg,
-              border: `1px solid ${theme.app.border}`,
-              color: theme.app.textPrimary,
-            }}
+            placeholder="Search by task"
+            className="bg-transparent outline-none text-sm flex-1"
+            style={{ color: theme.app.textPrimary }}
           />
         </div>
-        <Button icon={<Plus size={16} />} onClick={onOpenAddTaskModal}>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onOpenAddTaskModal}
+          className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium"
+          style={{
+            background: 'linear-gradient(135deg, #60A5FA, #3B82F6)',
+            color: 'white',
+            boxShadow: '0 4px 12px rgba(96, 165, 250, 0.3)',
+          }}
+        >
+          <Plus width={16} height={16} />
           Add task
-        </Button>
+        </motion.button>
       </div>
 
       {/* Tasks List */}
-      <div className="flex-1 overflow-y-auto px-5 space-y-2">
-        {tasks.length === 0 ? (
-          <div className="text-center py-8" style={{ color: theme.app.textMuted }}>
+      <div className="flex-1 overflow-y-auto px-5 space-y-2 pb-4">
+        {sortedTasks.length === 0 ? (
+          <div className="text-center py-12" style={{ color: theme.app.textMuted }}>
             <p className="text-sm">No tasks in this project yet</p>
+            <p className="text-xs mt-1">Click "Add task" to create one</p>
           </div>
         ) : (
-          tasks.map(task => (
-            <div
+          sortedTasks.map(task => (
+            <motion.div
               key={task.id}
-              className="flex items-center gap-3 p-3.5 rounded-xl hover:opacity-80 transition-all"
-              style={{ background: theme.app.cardBg }}
+              layout
+              whileHover={{ y: -2 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center gap-3 p-3.5 rounded-xl transition-all cursor-pointer"
+              style={{
+                background: task.id === activeTask?.id
+                  ? 'linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.08))'
+                  : theme.app.gradients.cardGlass,
+                border: `1px solid ${task.id === activeTask?.id ? 'rgba(52, 211, 153, 0.3)' : theme.app.border}`,
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                boxShadow: theme.app.shadows.card,
+              }}
             >
-              <button onClick={() => onToggleFavorite(task.id)} className="cursor-pointer">
-                <Star
-                  size={16}
-                  style={{ color: task.isFavorite ? theme.app.accentOrange : theme.app.textMuted }}
-                  fill={task.isFavorite ? theme.app.accentOrange : 'none'}
-                />
-              </button>
+              <Tooltip text={task.isFavorite ? "Remove from favorites" : "Add to favorites"} position="top">
+                <motion.button
+                  onClick={() => onToggleFavorite(task.id)}
+                  className="cursor-pointer"
+                  whileTap={{ scale: 0.8 }}
+                  animate={task.isFavorite ? { scale: [1, 1.3, 1] } : {}}
+                  transition={{ duration: 0.3 }}
+                >
+                  {task.isFavorite ? (
+                    <StarSolid
+                      width={16}
+                      height={16}
+                      style={{ color: theme.app.accentOrange }}
+                    />
+                  ) : (
+                    <Star
+                      width={16}
+                      height={16}
+                      style={{ color: theme.app.textMuted }}
+                    />
+                  )}
+                </motion.button>
+              </Tooltip>
               <div className="flex-1">
-                <div className="text-sm font-medium" style={{ color: theme.app.textPrimary }}>
+                <div className="text-sm font-medium mb-1" style={{ color: theme.app.textPrimary }}>
                   {task.name}
                 </div>
+                <div
+                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs"
+                  style={{
+                    background: 'rgba(52,211,153,0.15)',
+                    color: theme.app.accentGreen,
+                  }}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: theme.app.accentGreen }} />
+                  {task.project}
+                </div>
               </div>
-              <Info size={14} style={{ color: theme.app.textMuted }} />
+              <TimeInfoPopup task={task} />
               {task.id === activeTask?.id ? (
                 <span
                   className="text-sm tabular-nums px-3 py-1.5 rounded-lg font-medium"
@@ -139,35 +160,30 @@ export function ProjectDetailScreen({
                 </span>
               )}
               {task.id === activeTask?.id ? (
-                <button
-                  onClick={onStopTask}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
-                  style={{ background: theme.app.accentRed, color: 'white' }}
-                >
-                  <Pause size={14} fill="white" />
-                </button>
+                <Tooltip text="Stop tracking" position="left">
+                  <button
+                    onClick={onStopTask}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
+                    style={{ background: theme.app.accentRed, color: 'white' }}
+                  >
+                    <Pause width={14} height={14} />
+                  </button>
+                </Tooltip>
               ) : (
-                <button
-                  onClick={() => onStartTask(task.id)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
-                  style={{ background: theme.app.accentBlue, color: 'white' }}
-                >
-                  <Play size={14} fill="white" />
-                </button>
+                <Tooltip text="Start tracking" position="left">
+                  <button
+                    onClick={() => onStartTask(task.id)}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
+                    style={{ background: theme.app.accentBlue, color: 'white' }}
+                  >
+                    <Play width={14} height={14} />
+                  </button>
+                </Tooltip>
               )}
-            </div>
+            </motion.div>
           ))
         )}
       </div>
-
-      {/* Add Task Modal */}
-      <AddTaskModal
-        isOpen={showAddTaskModal}
-        onClose={onCloseAddTaskModal}
-        onAddTask={onAddTask}
-        projects={[project]}
-        selectedProjectId={project.id}
-      />
     </div>
   );
 }

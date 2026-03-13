@@ -16,6 +16,7 @@ export function TimeInfoPopup({ task }) {
   return (
     <div
       className="relative"
+      style={{ zIndex: show ? 100 : 'auto' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
@@ -29,11 +30,12 @@ export function TimeInfoPopup({ task }) {
 
       {show && (
         <div
-          className="absolute right-0 top-full mt-2 w-44 rounded-xl p-3 z-50"
+          className="absolute right-0 top-full mt-2 w-44 rounded-xl p-3"
           style={{
             background: theme.app.cardBg,
             border: `1px solid ${theme.app.border}`,
             boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            zIndex: 9999,
           }}
         >
           <div className="text-xs font-semibold mb-2" style={{ color: theme.app.textMuted }}>

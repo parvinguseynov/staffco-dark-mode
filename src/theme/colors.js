@@ -97,34 +97,57 @@ export const darkTheme = {
 export const lightTheme = {
   // macOS Desktop
   desktop: {
-    wallpaper: 'linear-gradient(145deg, #89CFF0 0%, #a0c4ff 30%, #cdb4db 60%, #ffc8dd 100%)',
-    menuBar: 'rgba(255, 255, 255, 0.85)',
-    menuBarBorder: 'rgba(0, 0, 0, 0.1)',
-    dock: 'rgba(255, 255, 255, 0.75)',
-    dockBorder: 'rgba(0, 0, 0, 0.1)',
+    wallpaper: 'linear-gradient(145deg, #E0F2FE 0%, #DBEAFE 40%, #E0E7FF 70%, #F0F9FF 100%)',
+    menuBar: 'rgba(255, 255, 255, 0.9)',
+    menuBarBorder: 'rgba(0, 0, 0, 0.08)',
+    dock: 'rgba(255, 255, 255, 0.85)',
+    dockBorder: 'rgba(0, 0, 0, 0.08)',
   },
 
   // StaffCo App
   app: {
-    windowBg: '#F8FAFC',
-    cardBg: '#FFFFFF',
+    // Backgrounds - clean, bright
+    windowBg: '#FFFFFF',
+    cardBg: '#F8FAFC',
     elevatedBg: '#F1F5F9',
     hoverBg: '#E2E8F0',
-    border: '#E2E8F0',
 
+    // Borders - subtle gray
+    border: '#E2E8F0',
+    borderLight: '#F1F5F9',
+    borderFocus: 'rgba(59, 130, 246, 0.5)',
+
+    // Text - dark for readability
     textPrimary: '#1E293B',
     textSecondary: '#64748B',
     textMuted: '#94A3B8',
     textInverse: '#FFFFFF',
 
+    // Accents - slightly darker for light bg
     accentBlue: '#3B82F6',
+    accentBlueGradient: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+
     accentGreen: '#10B981',
+    accentGreenGradient: 'linear-gradient(135deg, #10B981, #059669)',
+
     accentRed: '#EF4444',
+    accentRedGradient: 'linear-gradient(135deg, #EF4444, #DC2626)',
+
     accentOrange: '#F59E0B',
+    accentOrangeGradient: 'linear-gradient(135deg, #F59E0B, #D97706)',
+
     accentPurple: '#8B5CF6',
+    accentPurpleGradient: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+
     accentPink: '#EC4899',
     accentTeal: '#14B8A6',
-    accentActiveTask: '#EF4444',
+    accentTealGradient: 'linear-gradient(135deg, #14B8A6, #0F766E)',
+
+    accentActiveTask: '#10B981',
+
+    // Active task styling
+    activeTaskBg: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05))',
+    activeTaskBorder: 'rgba(16, 185, 129, 0.3)',
 
     // Gradient Definitions
     gradients: {
@@ -147,17 +170,22 @@ export const lightTheme = {
       modalGlass: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.98))',
     },
 
-    // Shadow Definitions
+    // Shadow Definitions - lighter for light mode
     shadows: {
       button: '0 4px 15px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
       buttonGreen: '0 4px 15px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
       buttonRed: '0 4px 15px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
       card: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.08)',
       modal: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+      shadowSm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+      shadowMd: '0 4px 6px rgba(0, 0, 0, 0.07)',
+      shadowLg: '0 10px 15px rgba(0, 0, 0, 0.1)',
+      shadowXl: '0 20px 25px rgba(0, 0, 0, 0.15)',
       glow: '0 0 30px rgba(59, 130, 246, 0.3)',
-      glowGreen: '0 0 30px rgba(16, 185, 129, 0.3)',
-      glowRed: '0 0 30px rgba(239, 68, 68, 0.3)',
-      glowOrange: '0 0 30px rgba(245, 158, 11, 0.3)',
+      glowBlue: '0 0 20px rgba(59, 130, 246, 0.3)',
+      glowGreen: '0 0 20px rgba(16, 185, 129, 0.3)',
+      glowRed: '0 0 20px rgba(239, 68, 68, 0.3)',
+      glowOrange: '0 0 20px rgba(245, 158, 11, 0.3)',
     },
   }
 };

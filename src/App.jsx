@@ -1,17 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { AppWindow } from './components/window/AppWindow';
+import { ThemeContext, ThemeProvider } from './context/ThemeContext';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Import screens
+import { LoginScreen } from './components/screens/LoginScreen';
+import { TasksScreen } from './components/screens/TasksScreen';
 import { Header } from './components/app/Header';
 import { Footer } from './components/app/Footer';
-import { TasksScreen } from './components/screens/TasksScreen';
-import { SettingsScreen } from './components/screens/SettingsScreen';
-import { LoginScreen } from './components/screens/LoginScreen';
-import { CompanyScreen } from './components/screens/CompanyScreen';
-import { ProjectDetailScreen } from './components/screens/ProjectDetailScreen';
 import DesignSystemPanel from './components/DesignSystemPanel';
 import { DevModeOverlay } from './components/DevModeOverlay';
-import { ThemeContext } from './context/ThemeContext';
-import { darkTheme, lightTheme } from './theme/colors';
 
 // Initial data constants for reset functionality
 const initialTasks = [
@@ -27,32 +24,16 @@ const initialProjects = [
   { id: 3, name: 'BP - BitPlay', color: '#F472B6', initials: 'B', isFavorite: false },
 ];
 
-function App() {
-  // Get theme context
-  const { isDarkMode, toggleTheme: contextToggleTheme, theme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
+function AppContent() {
+  const { theme, isDarkMode, toggleTheme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
 
-  // Debug: Log theme state on mount and when it changes
-  useEffect(() => {
-    console.log('=== APP Theme State ===', {
-      isDarkMode,
-      themeExists: !!theme,
-      hasApp: !!theme?.app,
-      hasDesktop: !!theme?.desktop,
-      appWindowBg: theme?.app?.windowBg,
-    });
-  }, [isDarkMode, theme]);
-
-  // Navigation state
-  const [currentScreen, setCurrentScreen] = useState('tasks');
-  const [activeTab, setActiveTab] = useState('tasks');
+  // ===== SIMPLE STATE =====
+  const [screen, setScreen] = useState('login'); // 'login' | 'tasks' | 'settings' | 'projectDetail'
+  const [activeTab, setActiveTab] = useState('tasks'); // 'tasks' | 'projects'
   const [selectedProject, setSelectedProject] = useState(null);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
-  // Developer Mode state
-  const [devMode, setDevMode] = useState(false);
-  const [notification, setNotification] = useState(null);
-
-  // Initialize tasks from localStorage or defaults
+  // Data state - Initialize from localStorage or defaults
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('staffco-tasks');
     return saved ? JSON.parse(saved) : [...initialTasks];
@@ -63,33 +44,83 @@ function App() {
     return saved ? JSON.parse(saved) : [...initialProjects];
   });
 
-  // Save projects to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('staffco-projects', JSON.stringify(projects));
-  }, [projects]);
-
   // Timer state
-  const [activeTaskId, setActiveTaskId] = useState(null);
+  const [activeTask, setActiveTask] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  // Developer Mode state
+  const [devMode, setDevMode] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   // Save tasks to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('staffco-tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  // Timer effect - counts up every second when running
+  // Save projects to localStorage whenever they change
   useEffect(() => {
-    let interval;
-    if (timerRunning && activeTaskId) {
-      interval = setInterval(() => {
-        setElapsedSeconds(prev => prev + 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timerRunning, activeTaskId]);
+    localStorage.setItem('staffco-projects', JSON.stringify(projects));
+  }, [projects]);
 
-  // Helper: Format seconds to HH:MM:SS
+  // ===== DEBUG LOGGING =====
+  useEffect(() => {
+    console.log('======= APP STATE =======');
+    console.log('screen:', screen);
+    console.log('selectedProject:', selectedProject);
+    console.log('activeTab:', activeTab);
+    console.log('tasks:', tasks);
+    console.log('projects:', projects);
+    console.log('theme:', theme);
+    console.log('=========================');
+  }, [screen, selectedProject, activeTab]);
+
+  // ===== NAVIGATION FUNCTIONS =====
+  const goToLogin = () => {
+    console.log('→ Going to login');
+    setScreen('login');
+  };
+
+  const goToTasks = () => {
+    console.log('→ Going to tasks');
+    setScreen('tasks');
+  };
+
+  const goToSettings = () => {
+    console.log('→ Going to settings');
+    setScreen('settings');
+  };
+
+  const goToProjectDetail = (project) => {
+    console.log('→ Going to project:', project);
+    setSelectedProject(project);
+    setScreen('projectDetail');
+  };
+
+  const goBack = () => {
+    console.log('← Going back from:', screen);
+    if (screen === 'settings') {
+      setScreen('tasks');
+    } else if (screen === 'projectDetail') {
+      setSelectedProject(null);
+      setScreen('tasks');
+      setActiveTab('projects');
+    }
+  };
+
+  // ===== HANDLERS =====
+  const handleLogin = () => {
+    setScreen('tasks');
+  };
+
+  const handleLogout = () => {
+    // Stop active task and save
+    if (activeTask) {
+      handleStopTask();
+    }
+    setScreen('login');
+  };
+
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -97,44 +128,42 @@ function App() {
     return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Timer handlers
   const handleStartTask = (taskId) => {
+    console.log('▶ Starting task:', taskId);
     // If there's an active task, save its time first
-    if (activeTaskId) {
+    if (activeTask) {
       setTasks(prev => prev.map(task =>
-        task.id === activeTaskId
-          ? { ...task, seconds: task.seconds + elapsedSeconds }
+        task.id === activeTask.id
+          ? { ...task, seconds: (task.seconds || 0) + elapsedSeconds }
           : task
       ));
     }
 
-    // Start the new task
     const task = tasks.find(t => t.id === taskId);
-    setActiveTaskId(taskId);
-    setElapsedSeconds(0);
-    setTimerRunning(true);
-  };
-
-  const handleStopTask = () => {
-    if (activeTaskId) {
-      // Save the accumulated time
-      setTasks(prev => prev.map(task =>
-        task.id === activeTaskId
-          ? { ...task, seconds: task.seconds + elapsedSeconds }
-          : task
-      ));
-      setActiveTaskId(null);
-      setTimerRunning(false);
+    if (task) {
+      setActiveTask(task);
+      setTimerRunning(true);
       setElapsedSeconds(0);
     }
   };
 
-  // Favorites handlers
+  const handleStopTask = () => {
+    console.log('⏸ Stopping task');
+    if (activeTask) {
+      setTasks(prev => prev.map(t =>
+        t.id === activeTask.id
+          ? { ...t, seconds: (t.seconds || 0) + elapsedSeconds }
+          : t
+      ));
+    }
+    setActiveTask(null);
+    setTimerRunning(false);
+    setElapsedSeconds(0);
+  };
+
   const handleToggleFavorite = (taskId) => {
-    setTasks(prev => prev.map(task =>
-      task.id === taskId
-        ? { ...task, isFavorite: !task.isFavorite }
-        : task
+    setTasks(prev => prev.map(t =>
+      t.id === taskId ? { ...t, isFavorite: !t.isFavorite } : t
     ));
   };
 
@@ -146,7 +175,6 @@ function App() {
     ));
   };
 
-  // Add task handler
   const handleAddTask = (taskData) => {
     const newTask = {
       id: Date.now(),
@@ -158,62 +186,6 @@ function App() {
     };
     setTasks(prev => [...prev, newTask]);
     setShowAddTaskModal(false);
-  };
-
-  // Navigation handlers
-  const handleLogin = () => {
-    setCurrentScreen('company');
-  };
-
-  const handleSelectCompany = () => {
-    setCurrentScreen('tasks');
-  };
-
-  const handleSettingsClick = () => {
-    console.log('=== NAVIGATING TO SETTINGS ===');
-    console.log('Current screen:', currentScreen);
-    console.log('Theme available:', !!theme);
-    console.log('Theme.app:', theme?.app);
-    setCurrentScreen('settings');
-    console.log('Screen set to: settings');
-  };
-
-  const handleUserAvatarClick = () => {
-    setCurrentScreen('company');
-  };
-
-  const handleBackClick = () => {
-    if (currentScreen === 'projectDetail') {
-      setCurrentScreen('tasks');
-      setActiveTab('projects');
-      setSelectedProject(null);
-    } else if (currentScreen === 'settings') {
-      setCurrentScreen('tasks');
-    } else if (currentScreen === 'company') {
-      setCurrentScreen('login');
-    }
-  };
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const handleProjectClick = (project) => {
-    console.log('=== NAVIGATING TO PROJECT DETAIL ===');
-    console.log('Project:', project);
-    console.log('Current screen:', currentScreen);
-    setSelectedProject(project);
-    setCurrentScreen('projectDetail');
-    console.log('Screen set to: projectDetail');
-  };
-
-  const handleLogout = () => {
-    // Stop active task and save
-    if (activeTaskId) {
-      handleStopTask();
-    }
-    // Navigate to login
-    setCurrentScreen('login');
   };
 
   const handleResetDemo = () => {
@@ -228,7 +200,7 @@ function App() {
     setElapsedSeconds(0);
 
     // Reset active task
-    setActiveTaskId(null);
+    setActiveTask(null);
 
     // Reset tasks to initial state
     setTasks([...initialTasks]);
@@ -237,7 +209,7 @@ function App() {
     setProjects([...initialProjects]);
 
     // Reset navigation
-    setCurrentScreen('tasks');
+    setScreen('tasks');
     setActiveTab('tasks');
     setSelectedProject(null);
 
@@ -260,46 +232,30 @@ function App() {
     setTimeout(() => setNotification(null), 2000);
   };
 
-  const showHeader = !['login', 'company'].includes(currentScreen);
-  const showBackButton = ['settings', 'company', 'projectDetail'].includes(currentScreen);
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (timerRunning) {
+      interval = setInterval(() => {
+        setElapsedSeconds(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timerRunning]);
 
-  // Back button text based on current screen
-  const getBackButtonText = () => {
-    if (currentScreen === 'projectDetail') return 'Back to Projects';
-    if (currentScreen === 'settings') return 'Back';
-    if (currentScreen === 'company') return 'Back';
-    return 'Back';
-  };
-
-  // Get active task object
-  const activeTask = activeTaskId ? tasks.find(t => t.id === activeTaskId) : null;
-
-  // Render function for current screen - prevents AnimatePresence issues with timer updates
+  // ===== RENDER CURRENT SCREEN =====
   const renderScreen = () => {
-    console.log('=== RENDERING SCREEN ===', {
-      currentScreen,
-      activeTaskId,
-      timerRunning,
-      elapsedSeconds,
-    });
+    console.log('🎬 renderScreen called, screen =', screen);
 
-    switch (currentScreen) {
+    switch (screen) {
       case 'login':
         return <LoginScreen onLogin={handleLogin} />;
-
-      case 'company':
-        return (
-          <CompanyScreen
-            onSelectCompany={handleSelectCompany}
-            onBackClick={handleBackClick}
-          />
-        );
 
       case 'tasks':
         return (
           <TasksScreen
             activeTab={activeTab}
-            onTabChange={handleTabChange}
+            onTabChange={setActiveTab}
             tasks={tasks}
             projects={projects}
             activeTask={activeTask}
@@ -310,7 +266,7 @@ function App() {
             onStopTask={handleStopTask}
             onToggleFavorite={handleToggleFavorite}
             onToggleProjectFavorite={handleToggleProjectFavorite}
-            onProjectClick={handleProjectClick}
+            onProjectClick={goToProjectDetail}
             showAddTaskModal={showAddTaskModal}
             onOpenAddTaskModal={() => setShowAddTaskModal(true)}
             onCloseAddTaskModal={() => setShowAddTaskModal(false)}
@@ -319,10 +275,11 @@ function App() {
         );
 
       case 'projectDetail':
+        console.log('📊 Rendering projectDetail, selectedProject:', selectedProject);
         return (
-          <ProjectDetailScreen
+          <ProjectDetailContent
             project={selectedProject}
-            tasks={tasks.filter(t => t.projectId === selectedProject?.id)}
+            tasks={tasks}
             activeTask={activeTask}
             timerRunning={timerRunning}
             elapsedSeconds={elapsedSeconds}
@@ -330,39 +287,26 @@ function App() {
             onStartTask={handleStartTask}
             onStopTask={handleStopTask}
             onToggleFavorite={handleToggleFavorite}
-            showAddTaskModal={showAddTaskModal}
-            onOpenAddTaskModal={() => setShowAddTaskModal(true)}
-            onCloseAddTaskModal={() => setShowAddTaskModal(false)}
-            onAddTask={handleAddTask}
           />
         );
 
       case 'settings':
-        return <SettingsScreen />;
+        console.log('⚙️ Rendering settings');
+        return <SettingsContent />;
 
       default:
-        return (
-          <TasksScreen
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            tasks={tasks}
-            projects={projects}
-            activeTask={activeTask}
-            timerRunning={timerRunning}
-            elapsedSeconds={elapsedSeconds}
-            formatTime={formatTime}
-            onStartTask={handleStartTask}
-            onStopTask={handleStopTask}
-            onToggleFavorite={handleToggleFavorite}
-            onToggleProjectFavorite={handleToggleProjectFavorite}
-            onProjectClick={handleProjectClick}
-            showAddTaskModal={showAddTaskModal}
-            onOpenAddTaskModal={() => setShowAddTaskModal(true)}
-            onCloseAddTaskModal={() => setShowAddTaskModal(false)}
-            onAddTask={handleAddTask}
-          />
-        );
+        return <div style={{ color: 'white', padding: 20 }}>Unknown screen: {screen}</div>;
     }
+  };
+
+  // Show header on all screens except login
+  const showHeader = screen !== 'login';
+  const showBackButton = screen === 'settings' || screen === 'projectDetail';
+
+  const getBackText = () => {
+    if (screen === 'settings') return 'Back';
+    if (screen === 'projectDetail') return 'Back to Projects';
+    return '';
   };
 
   return (
@@ -379,80 +323,65 @@ function App() {
         position: 'relative',
       }}
     >
-      {/* App Container */}
+      {/* App Window */}
       <div
         style={{
           width: '380px',
           height: '667px',
           borderRadius: '24px',
           overflow: 'hidden',
+          background: theme?.app?.windowBg || '#111827',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          border: `1px solid ${theme?.app?.border || '#334155'}`,
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        {/* Simple Title Bar */}
+        {/* Title bar */}
         <div
           style={{
             height: '40px',
-            background: isDarkMode ? '#1E293B' : '#FFFFFF',
-            borderBottom: `1px solid ${isDarkMode ? '#334155' : '#E2E8F0'}`,
             display: 'flex',
             alignItems: 'center',
             padding: '0 16px',
-            gap: '8px',
+            background: isDarkMode ? '#1E293B' : '#FFFFFF',
+            borderBottom: `1px solid ${theme?.app?.border || '#334155'}`,
+            position: 'relative',
           }}
         >
-          {/* Traffic Lights */}
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ position: 'absolute', left: '16px', display: 'flex', gap: '8px' }}>
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F57' }} />
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E' }} />
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28C840' }} />
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28CA41' }} />
           </div>
-          <div
-            style={{
-              fontSize: '13px',
-              fontWeight: 500,
-              color: isDarkMode ? '#94A3B8' : '#64748B',
-              marginLeft: '8px',
-            }}
-          >
+          <span style={{
+            fontSize: '13px',
+            fontWeight: 500,
+            color: theme?.app?.textSecondary || '#94A3B8',
+            marginLeft: '72px',
+          }}>
             talyvn
-          </div>
+          </span>
         </div>
 
-        {/* App Content */}
-        <AppWindow>
-          <div className="flex flex-col h-full">
-            {showHeader && (
-              <Header
-                onSettingsClick={handleSettingsClick}
-                onUserAvatarClick={handleUserAvatarClick}
-                showBackButton={showBackButton}
-                onBackClick={handleBackClick}
-                onLogout={handleLogout}
-                backButtonText={getBackButtonText()}
-              />
-            )}
+        {/* Header */}
+        {showHeader && (
+          <Header
+            showBackButton={showBackButton}
+            backButtonText={getBackText()}
+            onBackClick={goBack}
+            onSettingsClick={goToSettings}
+            onLogout={handleLogout}
+          />
+        )}
 
-            <div className="flex-1 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentScreen}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.15 }}
-                  className="h-full"
-                >
-                  {renderScreen()}
-                </motion.div>
-              </AnimatePresence>
-            </div>
+        {/* Main content area */}
+        <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          {renderScreen()}
+        </div>
 
-            {showHeader && <Footer />}
-          </div>
-        </AppWindow>
+        {/* Footer */}
+        {showHeader && <Footer />}
       </div>
 
       {/* Design System Panel */}
@@ -460,7 +389,7 @@ function App() {
         colors={theme}
         setColors={setCustomColors}
         isDarkMode={isDarkMode}
-        setIsDarkMode={contextToggleTheme}
+        setIsDarkMode={toggleTheme}
         onReset={resetToDefaultTheme}
         onResetDemo={handleResetDemo}
         devMode={devMode}
@@ -492,6 +421,436 @@ function App() {
         </div>
       )}
     </div>
+  );
+}
+
+// ===== INLINE COMPONENTS FOR DEBUGGING =====
+
+// Simple Settings component - inline to avoid import issues
+function SettingsContent() {
+  const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
+
+  console.log('⚙️ SettingsContent rendering, theme:', theme);
+  console.log('⚙️ isDarkMode:', isDarkMode);
+  console.log('⚙️ theme.app:', theme?.app);
+
+  if (!theme || !theme.app) {
+    return <div style={{ color: 'white', padding: 20 }}>Theme loading...</div>;
+  }
+
+  return (
+    <div style={{
+      padding: '20px',
+      overflowY: 'auto',
+      flex: 1,
+      background: theme.app.windowBg,
+    }}>
+      <h1 style={{
+        fontSize: '24px',
+        fontWeight: 700,
+        color: theme.app.textPrimary,
+        marginBottom: '8px',
+      }}>
+        Settings
+      </h1>
+      <p style={{
+        fontSize: '14px',
+        color: theme.app.textSecondary,
+        marginBottom: '24px',
+      }}>
+        Configure how the app works for you
+      </p>
+
+      {/* Settings Card */}
+      <div style={{
+        background: theme.app.cardBg,
+        borderRadius: '16px',
+        border: `1px solid ${theme.app.border}`,
+        overflow: 'hidden',
+      }}>
+        {/* Launch at Startup */}
+        <div style={{
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: `1px solid ${theme.app.border}`,
+        }}>
+          <div>
+            <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary }}>
+              Launch at Startup
+            </div>
+            <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
+              Auto start when computer boots
+            </div>
+          </div>
+          <div style={{
+            width: '44px',
+            height: '24px',
+            borderRadius: '12px',
+            background: '#3B82F6',
+            position: 'relative',
+            cursor: 'pointer',
+          }}>
+            <div style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '10px',
+              background: 'white',
+              position: 'absolute',
+              top: '2px',
+              right: '2px',
+            }} />
+          </div>
+        </div>
+
+        {/* Always-On Timer */}
+        <div style={{
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+          <div>
+            <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary }}>
+              Always-On Timer
+            </div>
+            <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
+              Small floating timer widget
+            </div>
+          </div>
+          <div style={{
+            width: '44px',
+            height: '24px',
+            borderRadius: '12px',
+            background: '#3B82F6',
+            position: 'relative',
+            cursor: 'pointer',
+          }}>
+            <div style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '10px',
+              background: 'white',
+              position: 'absolute',
+              top: '2px',
+              right: '2px',
+            }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Theme Card */}
+      <div style={{
+        marginTop: '16px',
+        background: theme.app.cardBg,
+        borderRadius: '16px',
+        border: `1px solid ${theme.app.border}`,
+        padding: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+        <div>
+          <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary }}>
+            Appearance
+          </div>
+          <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
+            Choose theme
+          </div>
+        </div>
+        <div style={{
+          display: 'flex',
+          background: theme.app.elevatedBg,
+          borderRadius: '10px',
+          overflow: 'hidden',
+        }}>
+          <button
+            onClick={() => isDarkMode && toggleTheme()}
+            style={{
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: !isDarkMode ? '#3B82F6' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '18px',
+            }}
+          >
+            ☀️
+          </button>
+          <button
+            onClick={() => !isDarkMode && toggleTheme()}
+            style={{
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: isDarkMode ? '#3B82F6' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '18px',
+            }}
+          >
+            🌙
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Simple ProjectDetail component - inline to avoid import issues
+function ProjectDetailContent({
+  project,
+  tasks = [],
+  activeTask,
+  formatTime,
+  onStartTask,
+  onStopTask,
+  onToggleFavorite,
+  elapsedSeconds = 0,
+}) {
+  const { theme } = useContext(ThemeContext);
+
+  console.log('📊 ProjectDetailContent rendering');
+  console.log('📊 project:', project);
+  console.log('📊 tasks:', tasks);
+  console.log('📊 theme:', theme);
+
+  if (!theme || !theme.app) {
+    return <div style={{ color: 'white', padding: 20 }}>Theme loading...</div>;
+  }
+
+  if (!project) {
+    return (
+      <div style={{
+        padding: '40px',
+        textAlign: 'center',
+        color: theme.app.textMuted,
+      }}>
+        No project selected
+      </div>
+    );
+  }
+
+  // Filter tasks for this project
+  const projectTasks = Array.isArray(tasks)
+    ? tasks.filter(t => t?.projectId === project.id)
+    : [];
+
+  console.log('📊 projectTasks filtered:', projectTasks);
+
+  return (
+    <div style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      background: theme.app.windowBg,
+    }}>
+      {/* Project Header */}
+      <div
+        style={{
+          margin: '20px 20px 16px',
+          padding: '20px',
+          borderRadius: '16px',
+          background: theme.app.gradients?.cardGlass || theme.app.cardBg,
+          border: `1px solid ${theme.app.border}`,
+          backdropFilter: 'blur(10px)',
+          boxShadow: theme.app.shadows?.card || '0 2px 8px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: project.color,
+              color: 'white',
+              fontWeight: 600,
+              fontSize: '18px',
+            }}
+          >
+            {project.initials}
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '18px', fontWeight: 700, color: theme.app.textPrimary }}>
+              {project.name}
+            </div>
+            <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
+              {projectTasks.length} {projectTasks.length === 1 ? 'task' : 'tasks'}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Search + Add Task */}
+      <div style={{
+        display: 'flex',
+        gap: '12px',
+        padding: '0 20px 16px',
+      }}>
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '12px 16px',
+          borderRadius: '14px',
+          background: theme.app.cardBg,
+          border: `1px solid ${theme.app.border}`,
+        }}>
+          <span style={{ color: theme.app.textMuted }}>🔍</span>
+          <input
+            placeholder="Search by task"
+            style={{
+              flex: 1,
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              fontSize: '14px',
+              color: theme.app.textPrimary,
+            }}
+          />
+        </div>
+
+        <button style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '12px 20px',
+          borderRadius: '14px',
+          background: 'linear-gradient(135deg, #60A5FA, #3B82F6)',
+          color: 'white',
+          border: 'none',
+          fontSize: '14px',
+          fontWeight: 600,
+          cursor: 'pointer',
+        }}>
+          + Add task
+        </button>
+      </div>
+
+      {/* Tasks list */}
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        padding: '0 20px 20px',
+      }}>
+        {projectTasks.length === 0 ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '48px 20px',
+            color: theme.app.textMuted,
+          }}>
+            <p style={{ fontSize: '14px' }}>No tasks in this project yet</p>
+            <p style={{ fontSize: '12px', marginTop: '4px' }}>Click "Add task" to create one</p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {projectTasks.map(task => {
+              const isActive = task.id === activeTask?.id;
+              const totalSeconds = isActive
+                ? (task.seconds || 0) + elapsedSeconds
+                : (task.seconds || 0);
+              const timeDisplay = formatTime ? formatTime(totalSeconds) : '00:00:00';
+
+              return (
+                <div
+                  key={task.id}
+                  style={{
+                    position: 'relative',
+                    zIndex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '16px',
+                    borderRadius: '16px',
+                    background: isActive
+                      ? 'linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.08))'
+                      : theme.app.gradients?.cardGlass || theme.app.cardBg,
+                    border: `1px solid ${isActive ? 'rgba(52, 211, 153, 0.3)' : theme.app.border}`,
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: theme.app.shadows?.card || '0 2px 8px rgba(0, 0, 0, 0.1)',
+                  }}
+                >
+                  {/* Star */}
+                  <button
+                    onClick={() => onToggleFavorite && onToggleFavorite(task.id)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '18px',
+                    }}
+                  >
+                    {task.isFavorite ? '⭐' : '☆'}
+                  </button>
+
+                  {/* Task name */}
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontSize: '14px',
+                      fontWeight: 500,
+                      color: theme.app.textPrimary,
+                    }}>
+                      {task.name}
+                    </div>
+                  </div>
+
+                  {/* Time */}
+                  <span style={{
+                    fontSize: '14px',
+                    color: isActive ? '#34D399' : theme.app.textSecondary,
+                    fontFamily: 'monospace',
+                  }}>
+                    {timeDisplay}
+                  </span>
+
+                  {/* Play/Pause */}
+                  <button
+                    onClick={() => isActive ? onStopTask() : onStartTask(task.id)}
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '10px',
+                      background: isActive
+                        ? 'linear-gradient(135deg, #F87171, #EF4444)'
+                        : 'linear-gradient(135deg, #60A5FA, #3B82F6)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '16px',
+                    }}
+                  >
+                    {isActive ? '⏸' : '▶'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Main App wrapper
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

@@ -241,7 +241,10 @@ export function TasksScreen({
         {activeTab === 'tasks' ? (
           // Tasks List
           <>
-            {sortedTasks.map(task => (
+            {sortedTasks.map(task => {
+              const isActive = task.id === activeTask?.id;
+
+              return (
               <motion.div
                 key={task.id}
                 layout
@@ -251,8 +254,10 @@ export function TasksScreen({
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  background: theme.app.gradients.cardGlass,
-                  border: `1px solid ${theme.app.border}`,
+                  background: isActive
+                    ? 'linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.08))'
+                    : theme.app.gradients.cardGlass,
+                  border: `1px solid ${isActive ? 'rgba(52, 211, 153, 0.3)' : theme.app.border}`,
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   boxShadow: theme.app.shadows.card,
@@ -297,44 +302,82 @@ export function TasksScreen({
                   </div>
                 </div>
                 <TimeInfoPopup task={task} />
-                {task.id === activeTask?.id ? (
+                {isActive ? (
                   <span
-                    className="text-sm tabular-nums px-3 py-1.5 rounded-lg font-medium"
                     style={{
-                      background: theme.app.accentGreen,
-                      color: 'white'
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      background: 'linear-gradient(135deg, #34D399, #10B981)',
+                      color: 'white',
+                      fontFamily: 'SF Mono, monospace',
+                      boxShadow: '0 2px 8px rgba(52, 211, 153, 0.3)',
                     }}
                   >
                     {getTotalTime(task)}
                   </span>
                 ) : (
-                  <span className="text-sm tabular-nums" style={{ color: theme.app.textSecondary }}>
+                  <span
+                    style={{
+                      fontSize: '14px',
+                      color: theme.app.textSecondary,
+                      fontFamily: 'SF Mono, monospace',
+                    }}
+                  >
                     {getTotalTime(task)}
                   </span>
                 )}
-                {task.id === activeTask?.id ? (
+                {isActive ? (
                   <Tooltip text="Stop tracking" position="left">
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={onStopTask}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
-                      style={{ background: theme.app.accentRed, color: 'white' }}
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #F87171, #EF4444)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 12px rgba(248, 113, 113, 0.3)',
+                        color: 'white',
+                      }}
                     >
-                      <Pause width={14} height={14} />
-                    </button>
+                      <Pause width={16} height={16} />
+                    </motion.button>
                   </Tooltip>
                 ) : (
                   <Tooltip text="Start tracking" position="left">
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => onStartTask(task.id)}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity"
-                      style={{ background: theme.app.accentBlue, color: 'white' }}
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #60A5FA, #3B82F6)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 12px rgba(96, 165, 250, 0.3)',
+                        color: 'white',
+                      }}
                     >
-                      <Play width={14} height={14} />
-                    </button>
+                      <Play width={16} height={16} />
+                    </motion.button>
                   </Tooltip>
                 )}
               </motion.div>
-            ))}
+            );
+            })}
           </>
         ) : (
           // Projects List

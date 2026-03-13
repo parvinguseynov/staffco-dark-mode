@@ -807,21 +807,42 @@ function ProjectDetailContent({
                   </div>
 
                   {/* Time */}
-                  <span style={{
-                    fontSize: '14px',
-                    color: isActive ? '#34D399' : theme.app.textSecondary,
-                    fontFamily: 'monospace',
-                  }}>
-                    {timeDisplay}
-                  </span>
+                  {isActive ? (
+                    <span
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        background: 'linear-gradient(135deg, #34D399, #10B981)',
+                        color: 'white',
+                        fontFamily: 'SF Mono, monospace',
+                        boxShadow: '0 2px 8px rgba(52, 211, 153, 0.3)',
+                      }}
+                    >
+                      {timeDisplay}
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        fontSize: '14px',
+                        color: theme.app.textSecondary,
+                        fontFamily: 'SF Mono, monospace',
+                      }}
+                    >
+                      {timeDisplay}
+                    </span>
+                  )}
 
                   {/* Play/Pause */}
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => isActive ? onStopTask() : onStartTask(task.id)}
                     style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '10px',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '12px',
                       background: isActive
                         ? 'linear-gradient(135deg, #F87171, #EF4444)'
                         : 'linear-gradient(135deg, #60A5FA, #3B82F6)',
@@ -832,10 +853,13 @@ function ProjectDetailContent({
                       justifyContent: 'center',
                       color: 'white',
                       fontSize: '16px',
+                      boxShadow: isActive
+                        ? '0 4px 12px rgba(248, 113, 113, 0.3)'
+                        : '0 4px 12px rgba(96, 165, 250, 0.3)',
                     }}
                   >
                     {isActive ? '⏸' : '▶'}
-                  </button>
+                  </motion.button>
                 </div>
               );
             })}

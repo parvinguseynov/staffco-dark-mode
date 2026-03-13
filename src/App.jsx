@@ -312,14 +312,15 @@ function AppContent() {
   return (
     <div
       style={{
-        width: '100vw',
-        height: '100vh',
-        background: isDarkMode
-          ? 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)'
-          : 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)',
+        minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: '40px 20px',
+        background: isDarkMode
+          ? 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)'
+          : 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)',
+        boxSizing: 'border-box',
         position: 'relative',
       }}
     >
@@ -328,7 +329,9 @@ function AppContent() {
         style={{
           width: '100%',
           maxWidth: '460px',
-          height: '820px',
+          height: '85vh',
+          minHeight: '600px',
+          maxHeight: '820px',
           borderRadius: '20px',
           overflow: 'hidden',
           background: theme?.app?.windowBg || '#111827',

@@ -1,7 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Desktop } from './components/macos/Desktop';
-import { MenuBar } from './components/macos/MenuBar';
 import { AppWindow } from './components/window/AppWindow';
 import { Header } from './components/app/Header';
 import { Footer } from './components/app/Footer';
@@ -368,40 +366,94 @@ function App() {
   };
 
   return (
-    <Desktop>
-      <MenuBar onResetDemo={handleResetDemo} />
-
-      <AppWindow>
-        <div className="flex flex-col h-full">
-          {showHeader && (
-            <Header
-              onSettingsClick={handleSettingsClick}
-              onUserAvatarClick={handleUserAvatarClick}
-              showBackButton={showBackButton}
-              onBackClick={handleBackClick}
-              onLogout={handleLogout}
-              backButtonText={getBackButtonText()}
-            />
-          )}
-
-          <div className="flex-1 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentScreen}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.15 }}
-                className="h-full"
-              >
-                {renderScreen()}
-              </motion.div>
-            </AnimatePresence>
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        background: isDarkMode
+          ? 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)'
+          : 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+      }}
+    >
+      {/* App Container */}
+      <div
+        style={{
+          width: '380px',
+          height: '667px',
+          borderRadius: '24px',
+          overflow: 'hidden',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* Simple Title Bar */}
+        <div
+          style={{
+            height: '40px',
+            background: isDarkMode ? '#1E293B' : '#FFFFFF',
+            borderBottom: `1px solid ${isDarkMode ? '#334155' : '#E2E8F0'}`,
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 16px',
+            gap: '8px',
+          }}
+        >
+          {/* Traffic Lights */}
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F57' }} />
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E' }} />
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28C840' }} />
           </div>
-
-          {showHeader && <Footer />}
+          <div
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              color: isDarkMode ? '#94A3B8' : '#64748B',
+              marginLeft: '8px',
+            }}
+          >
+            talyvn
+          </div>
         </div>
-      </AppWindow>
+
+        {/* App Content */}
+        <AppWindow>
+          <div className="flex flex-col h-full">
+            {showHeader && (
+              <Header
+                onSettingsClick={handleSettingsClick}
+                onUserAvatarClick={handleUserAvatarClick}
+                showBackButton={showBackButton}
+                onBackClick={handleBackClick}
+                onLogout={handleLogout}
+                backButtonText={getBackButtonText()}
+              />
+            )}
+
+            <div className="flex-1 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentScreen}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.15 }}
+                  className="h-full"
+                >
+                  {renderScreen()}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {showHeader && <Footer />}
+          </div>
+        </AppWindow>
+      </div>
 
       {/* Design System Panel */}
       <DesignSystemPanel
@@ -439,7 +491,7 @@ function App() {
           ✓ {notification}
         </div>
       )}
-    </Desktop>
+    </div>
   );
 }
 

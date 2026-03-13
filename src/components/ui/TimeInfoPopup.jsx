@@ -15,49 +15,74 @@ export function TimeInfoPopup({ task }) {
 
   return (
     <div
-      className="relative"
-      style={{ zIndex: show ? 100 : 'auto' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
+      style={{
+        position: 'relative',
+        zIndex: show ? 9999 : 1,  // CRITICAL: Lift entire container when showing
+      }}
     >
-      <button className="p-1 rounded hover:opacity-70 transition-opacity">
-        <InfoCircle
-          width={16}
-          height={16}
-          style={{ color: theme.app.textMuted }}
-        />
+      <button
+        style={{
+          padding: '4px',
+          borderRadius: '4px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          opacity: 1,
+          transition: 'opacity 0.2s',
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+      >
+        <InfoCircle width={16} height={16} style={{ color: theme.app.textMuted }} />
       </button>
 
       {show && (
         <div
-          className="absolute right-0 top-full mt-2 w-44 rounded-xl p-3"
           style={{
-            background: theme.app.cardBg,
-            border: `1px solid ${theme.app.border}`,
-            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-            zIndex: 9999,
+            position: 'absolute',
+            right: 0,
+            top: '100%',
+            marginTop: '8px',
+            width: '176px',
+            padding: '12px',
+            borderRadius: '12px',
+            background: theme.app.cardBg || '#1E293B',
+            border: `1px solid ${theme.app.border || '#334155'}`,
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
+            zIndex: 99999,  // VERY HIGH z-index
           }}
         >
-          <div className="text-xs font-semibold mb-2" style={{ color: theme.app.textMuted }}>
+          <div
+            style={{
+              fontSize: '11px',
+              fontWeight: 600,
+              color: theme.app.textMuted,
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+            }}
+          >
             TIME TRACKED
           </div>
 
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm" style={{ color: theme.app.textSecondary }}>Today</span>
-              <span className="text-sm font-medium" style={{ color: theme.app.textPrimary }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '13px', color: theme.app.textSecondary }}>Today</span>
+              <span style={{ fontSize: '13px', fontWeight: 500, color: theme.app.textPrimary }}>
                 {timeData.today}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm" style={{ color: theme.app.textSecondary }}>This Week</span>
-              <span className="text-sm font-medium" style={{ color: theme.app.textPrimary }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '13px', color: theme.app.textSecondary }}>This Week</span>
+              <span style={{ fontSize: '13px', fontWeight: 500, color: theme.app.textPrimary }}>
                 {timeData.thisWeek}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm" style={{ color: theme.app.textSecondary }}>This Month</span>
-              <span className="text-sm font-medium" style={{ color: theme.app.textPrimary }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '13px', color: theme.app.textSecondary }}>This Month</span>
+              <span style={{ fontSize: '13px', fontWeight: 500, color: theme.app.textPrimary }}>
                 {timeData.thisMonth}
               </span>
             </div>

@@ -249,6 +249,8 @@ export function TasksScreen({
                 transition={{ duration: 0.2 }}
                 className="flex items-center gap-3 p-3.5 rounded-xl transition-all cursor-pointer"
                 style={{
+                  position: 'relative',
+                  zIndex: 1,
                   background: theme.app.gradients.cardGlass,
                   border: `1px solid ${theme.app.border}`,
                   backdropFilter: 'blur(10px)',
@@ -346,6 +348,8 @@ export function TasksScreen({
                 onClick={() => onProjectClick(project)}
                 className="flex items-center gap-3 p-3.5 rounded-xl transition-all cursor-pointer"
                 style={{
+                  position: 'relative',
+                  zIndex: 1,
                   background: theme.app.gradients.cardGlass,
                   border: `1px solid ${theme.app.border}`,
                   backdropFilter: 'blur(10px)',

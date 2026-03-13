@@ -18,8 +18,16 @@ export function ProjectDetailScreen({
 }) {
   const { theme } = useContext(ThemeContext);
 
+  // Debug logging
+  console.log('=== ProjectDetailScreen Render ===');
+  console.log('project:', project);
+  console.log('tasks:', tasks);
+  console.log('tasks is array:', Array.isArray(tasks));
+  console.log('activeTask:', activeTask);
+
   // Safety check
   if (!project) {
+    console.error('ProjectDetailScreen: No project provided');
     return (
       <div className="flex items-center justify-center h-full" style={{ color: theme.app.textMuted }}>
         Project not found
@@ -27,8 +35,12 @@ export function ProjectDetailScreen({
     );
   }
 
-  // Filter tasks for this project
-  const projectTasks = tasks.filter(t => t.projectId === project.id);
+  // Safe array filtering
+  const projectTasks = Array.isArray(tasks)
+    ? tasks.filter(t => t?.projectId === project.id)
+    : [];
+
+  console.log('projectTasks filtered:', projectTasks);
 
   // Sort: favorites first
   const sortedTasks = [...projectTasks].sort((a, b) => {
@@ -36,6 +48,8 @@ export function ProjectDetailScreen({
     if (!a.isFavorite && b.isFavorite) return 1;
     return 0;
   });
+
+  console.log('sortedTasks:', sortedTasks);
 
   const getTotalTime = (task) => {
     const totalSeconds = task.id === activeTask?.id
@@ -46,6 +60,35 @@ export function ProjectDetailScreen({
 
   return (
     <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>
+      {/* Project Header */}
+      <div
+        className="mx-5 mt-5 p-5 rounded-2xl"
+        style={{
+          background: theme.app.gradients.cardGlass,
+          border: `1px solid ${theme.app.border}`,
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          boxShadow: theme.app.shadows.card,
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-semibold"
+            style={{ background: project.color }}
+          >
+            {project.initials}
+          </div>
+          <div className="flex-1">
+            <div className="text-lg font-bold" style={{ color: theme.app.textPrimary }}>
+              {project.name}
+            </div>
+            <div className="text-xs" style={{ color: theme.app.textSecondary }}>
+              {sortedTasks.length} {sortedTasks.length === 1 ? 'task' : 'tasks'}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Search + Add Task */}
       <div className="flex gap-3 px-5 py-4">
         <div
@@ -96,6 +139,8 @@ export function ProjectDetailScreen({
               transition={{ duration: 0.2 }}
               className="flex items-center gap-3 p-3.5 rounded-xl transition-all cursor-pointer"
               style={{
+                position: 'relative',
+                zIndex: 1,
                 background: task.id === activeTask?.id
                   ? 'linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.08))'
                   : theme.app.gradients.cardGlass,

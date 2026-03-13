@@ -36,7 +36,7 @@ export function AppWindow({ children }) {
             className="absolute left-1/2 transform -translate-x-1/2 text-xs font-medium"
             style={{ color: theme.app.textSecondary }}
           >
-            StaffCo
+            talyvn
           </div>
         </div>
 

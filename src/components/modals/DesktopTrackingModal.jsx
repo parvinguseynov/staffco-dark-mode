@@ -95,7 +95,7 @@ export function DesktopTrackingModal({ isOpen, onOpenApp }) {
             className="text-sm text-center mb-6"
             style={{ color: '#94A3B8', lineHeight: '1.6' }}
           >
-            Your time is being tracked through the StaffCo Desktop application.
+            Your time is being tracked through the talyvn Desktop application.
           </motion.p>
 
           <motion.button

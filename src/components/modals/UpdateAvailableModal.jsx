@@ -95,7 +95,7 @@ export function UpdateAvailableModal({ isOpen, version = '2.2.0', onUpdate, onLa
             className="text-sm text-center mb-1"
             style={{ color: '#94A3B8' }}
           >
-            A new version of StaffCo is available
+            A new version of talyvn is available
           </motion.p>
 
           <motion.p

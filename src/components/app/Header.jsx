@@ -3,6 +3,7 @@ import { ChatBubble, Settings } from 'iconoir-react';
 import { ThemeContext } from '../../context/ThemeContext';
 import { UserDropdownMenu } from './UserDropdownMenu';
 import { Tooltip } from '../ui/Tooltip';
+import { TalyvnLogo } from '../brand/TalyvnLogo';
 
 export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onBackClick, onLogout, backButtonText = 'Back' }) {
   const { theme, isDarkMode } = useContext(ThemeContext);
@@ -26,14 +27,10 @@ export function Header({ onSettingsClick, onUserAvatarClick, showBackButton, onB
         </button>
       ) : (
         <div className="flex items-center">
-          <img
-            src={isDarkMode ? "/white_logo.png" : "/logo.png"}
-            alt="StaffCo"
-            style={{
-              height: '28px',
-              width: 'auto',
-              objectFit: 'contain',
-            }}
+          <TalyvnLogo
+            size="md"
+            showWordmark={true}
+            style={{ color: theme.app.textPrimary }}
           />
         </div>
       )}

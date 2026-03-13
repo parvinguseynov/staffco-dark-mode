@@ -1,4 +1,4 @@
-# StaffCo UI Style Guide - 2025 Modern Design System
+# talyvn UI Style Guide - 2025 Modern Design System
 
 ## Design Principles
 

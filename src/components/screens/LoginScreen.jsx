@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { OpenNewWindow } from 'iconoir-react';
 import { ThemeContext } from '../../context/ThemeContext';
+import { TalyvnLogo } from '../brand/TalyvnLogo';
 
 export function LoginScreen({ onLogin }) {
   const { theme } = useContext(ThemeContext);
@@ -12,11 +13,13 @@ export function LoginScreen({ onLogin }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center justify-center px-8">
         {/* Logo */}
-        <img
-          src="/white_logo.png"
-          alt="StaffCo"
-          className="h-10 mb-8"
-        />
+        <div className="mb-8">
+          <TalyvnLogo
+            size="lg"
+            showWordmark={true}
+            style={{ color: theme.app.textPrimary }}
+          />
+        </div>
 
         {/* Email field */}
         <input

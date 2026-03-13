@@ -316,7 +316,7 @@ function AppContent() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '40px 20px',
+        padding: '20px',
         background: isDarkMode
           ? 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)'
           : 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)',
@@ -329,9 +329,9 @@ function AppContent() {
         style={{
           width: '100%',
           maxWidth: '460px',
-          height: '85vh',
-          minHeight: '600px',
-          maxHeight: '820px',
+          height: '92vh',
+          minHeight: '700px',
+          maxHeight: '950px',
           borderRadius: '20px',
           overflow: 'hidden',
           background: theme?.app?.windowBg || '#111827',
@@ -434,6 +434,10 @@ function AppContent() {
 function SettingsContent() {
   const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
 
+  // Add state for toggles
+  const [launchAtStartup, setLaunchAtStartup] = useState(true);
+  const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
+
   console.log('⚙️ SettingsContent rendering, theme:', theme);
   console.log('⚙️ isDarkMode:', isDarkMode);
   console.log('⚙️ theme.app:', theme?.app);
@@ -472,7 +476,7 @@ function SettingsContent() {
         border: `1px solid ${theme.app.border}`,
         overflow: 'hidden',
       }}>
-        {/* Launch at Startup */}
+        {/* Launch at Startup - WORKING TOGGLE */}
         <div style={{
           padding: '16px',
           display: 'flex',
@@ -488,27 +492,39 @@ function SettingsContent() {
               Auto start when computer boots
             </div>
           </div>
-          <div style={{
-            width: '44px',
-            height: '24px',
-            borderRadius: '12px',
-            background: '#3B82F6',
-            position: 'relative',
-            cursor: 'pointer',
-          }}>
-            <div style={{
-              width: '20px',
-              height: '20px',
-              borderRadius: '10px',
-              background: 'white',
-              position: 'absolute',
-              top: '2px',
-              right: '2px',
-            }} />
-          </div>
+
+          {/* Toggle - clickable */}
+          <button
+            onClick={() => setLaunchAtStartup(!launchAtStartup)}
+            style={{
+              width: '52px',
+              height: '28px',
+              borderRadius: '14px',
+              padding: '2px',
+              border: 'none',
+              cursor: 'pointer',
+              background: launchAtStartup
+                ? 'linear-gradient(135deg, #60A5FA, #3B82F6)'
+                : 'rgba(71, 85, 105, 0.5)',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '12px',
+                background: 'white',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                transition: 'transform 0.3s ease',
+                transform: launchAtStartup ? 'translateX(24px)' : 'translateX(0)',
+              }}
+            />
+          </button>
         </div>
 
-        {/* Always-On Timer */}
+        {/* Always-On Timer - WORKING TOGGLE */}
         <div style={{
           padding: '16px',
           display: 'flex',
@@ -523,24 +539,36 @@ function SettingsContent() {
               Small floating timer widget
             </div>
           </div>
-          <div style={{
-            width: '44px',
-            height: '24px',
-            borderRadius: '12px',
-            background: '#3B82F6',
-            position: 'relative',
-            cursor: 'pointer',
-          }}>
-            <div style={{
-              width: '20px',
-              height: '20px',
-              borderRadius: '10px',
-              background: 'white',
-              position: 'absolute',
-              top: '2px',
-              right: '2px',
-            }} />
-          </div>
+
+          {/* Toggle - clickable */}
+          <button
+            onClick={() => setAlwaysOnTimer(!alwaysOnTimer)}
+            style={{
+              width: '52px',
+              height: '28px',
+              borderRadius: '14px',
+              padding: '2px',
+              border: 'none',
+              cursor: 'pointer',
+              background: alwaysOnTimer
+                ? 'linear-gradient(135deg, #60A5FA, #3B82F6)'
+                : 'rgba(71, 85, 105, 0.5)',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '12px',
+                background: 'white',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                transition: 'transform 0.3s ease',
+                transform: alwaysOnTimer ? 'translateX(24px)' : 'translateX(0)',
+              }}
+            />
+          </button>
         </div>
       </div>
 
@@ -563,24 +591,28 @@ function SettingsContent() {
             Choose theme
           </div>
         </div>
+
+        {/* Theme toggle buttons */}
         <div style={{
           display: 'flex',
           background: theme.app.elevatedBg,
           borderRadius: '10px',
           overflow: 'hidden',
+          border: `1px solid ${theme.app.border}`,
         }}>
           <button
             onClick={() => isDarkMode && toggleTheme()}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: !isDarkMode ? '#3B82F6' : 'transparent',
+              background: !isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
               border: 'none',
               cursor: 'pointer',
               fontSize: '18px',
+              transition: 'all 0.2s ease',
             }}
           >
             ☀️
@@ -588,15 +620,16 @@ function SettingsContent() {
           <button
             onClick={() => !isDarkMode && toggleTheme()}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: isDarkMode ? '#3B82F6' : 'transparent',
+              background: isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
               border: 'none',
               cursor: 'pointer',
               fontSize: '18px',
+              transition: 'all 0.2s ease',
             }}
           >
             🌙

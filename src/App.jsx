@@ -34,8 +34,7 @@ function AppContent() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
-  // 2FA state
-  const [show2FA, setShow2FA] = useState(false);
+  // 2FA state (for demo purposes only)
   const [twoFAError, setTwoFAError] = useState(null); // 'invalid' | 'expired' | null
 
   // Data state - Initialize from localStorage or defaults
@@ -115,9 +114,13 @@ function AppContent() {
 
   // ===== HANDLERS =====
   const handleLogin = () => {
-    // After successful email/password, show 2FA
-    setShow2FA(true);
-    setTwoFAError(null);
+    // Go directly to tasks screen (skip 2FA for normal flow)
+    setScreen('tasks');
+  };
+
+  // 2FA demo handler (for testing in Design System Panel)
+  const handleDemo2FA = (errorState = null) => {
+    setTwoFAError(errorState);
     setScreen('2fa');
   };
 
@@ -125,7 +128,6 @@ function AppContent() {
     // Demo: check if code is "123456" for success
     if (code === '123456') {
       setTwoFAError(null);
-      setShow2FA(false);
       setScreen('tasks');
     } else if (code === '000000') {
       setTwoFAError('expired');
@@ -138,7 +140,6 @@ function AppContent() {
     console.log('Backup code:', code);
     // Demo: accept any backup code
     setTwoFAError(null);
-    setShow2FA(false);
     setScreen('tasks');
   };
 
@@ -158,7 +159,6 @@ function AppContent() {
       handleStopTask();
     }
     setScreen('login');
-    setShow2FA(false);
     setTwoFAError(null);
   };
 
@@ -455,6 +455,7 @@ function AppContent() {
         onResetDemo={handleResetDemo}
         devMode={devMode}
         setDevMode={setDevMode}
+        onDemo2FA={handleDemo2FA}
       />
 
       {/* Developer Mode Overlay */}

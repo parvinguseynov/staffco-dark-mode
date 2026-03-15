@@ -96,7 +96,7 @@ const ColorPicker = ({ label, value, onChange, isDarkMode }) => {
   );
 };
 
-const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset, onResetDemo, devMode, setDevMode }) => {
+const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onReset, onResetDemo, devMode, setDevMode, onDemo2FA }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [copiedText, setCopiedText] = useState(null);
 
@@ -590,6 +590,82 @@ const DesignSystemPanel = ({ colors, setColors, isDarkMode, setIsDarkMode, onRes
                   Desktop Tracking
                 </button>
               </div>
+            </div>
+
+            {/* 2FA Demo Section */}
+            <div style={{
+              marginBottom: '24px',
+              paddingBottom: '24px',
+              borderBottom: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+            }}>
+              <h3 style={{
+                fontSize: '11px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                color: isDarkMode ? '#64748B' : '#94A3B8',
+                marginBottom: '12px',
+              }}>
+                2FA Demos
+              </h3>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <button
+                  onClick={() => onDemo2FA && onDemo2FA(null)}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  2FA - Empty State
+                </button>
+
+                <button
+                  onClick={() => onDemo2FA && onDemo2FA('invalid')}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  2FA - Invalid Code Error
+                </button>
+
+                <button
+                  onClick={() => onDemo2FA && onDemo2FA('expired')}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    background: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+                    color: isDarkMode ? '#CBD5E1' : '#475569',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                  }}
+                >
+                  2FA - Expired Code Error
+                </button>
+              </div>
+
+              <p style={{
+                fontSize: '11px',
+                color: isDarkMode ? '#64748B' : '#94A3B8',
+                marginTop: '8px',
+              }}>
+                Demo codes: 123456 = success, 000000 = expired, other = invalid
+              </p>
             </div>
 
             {/* Action Buttons */}

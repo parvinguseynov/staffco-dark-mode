@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Import screens
 import { LoginScreen } from './components/screens/LoginScreen';
+import { TwoFactorScreen } from './components/screens/TwoFactorScreen';
 import { TasksScreen } from './components/screens/TasksScreen';
 import { Header } from './components/app/Header';
 import { Footer } from './components/app/Footer';
@@ -28,10 +29,14 @@ function AppContent() {
   const { theme, isDarkMode, toggleTheme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
 
   // ===== SIMPLE STATE =====
-  const [screen, setScreen] = useState('login'); // 'login' | 'tasks' | 'settings' | 'projectDetail'
+  const [screen, setScreen] = useState('login'); // 'login' | '2fa' | 'tasks' | 'settings' | 'projectDetail'
   const [activeTab, setActiveTab] = useState('tasks'); // 'tasks' | 'projects'
   const [selectedProject, setSelectedProject] = useState(null);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+
+  // 2FA state
+  const [show2FA, setShow2FA] = useState(false);
+  const [twoFAError, setTwoFAError] = useState(null); // 'invalid' | 'expired' | null
 
   // Data state - Initialize from localStorage or defaults
   const [tasks, setTasks] = useState(() => {
@@ -110,7 +115,41 @@ function AppContent() {
 
   // ===== HANDLERS =====
   const handleLogin = () => {
+    // After successful email/password, show 2FA
+    setShow2FA(true);
+    setTwoFAError(null);
+    setScreen('2fa');
+  };
+
+  const handleVerify2FA = (code) => {
+    // Demo: check if code is "123456" for success
+    if (code === '123456') {
+      setTwoFAError(null);
+      setShow2FA(false);
+      setScreen('tasks');
+    } else if (code === '000000') {
+      setTwoFAError('expired');
+    } else {
+      setTwoFAError('invalid');
+    }
+  };
+
+  const handleBackupCode = (code) => {
+    console.log('Backup code:', code);
+    // Demo: accept any backup code
+    setTwoFAError(null);
+    setShow2FA(false);
     setScreen('tasks');
+  };
+
+  const handleRegister = () => {
+    console.log('Register clicked - would navigate to registration');
+    // For now, just log - could add registration screen later
+  };
+
+  const handleForgotPassword = () => {
+    console.log('Forgot password clicked - would navigate to password reset');
+    // For now, just log - could add password reset screen later
   };
 
   const handleLogout = () => {
@@ -119,6 +158,8 @@ function AppContent() {
       handleStopTask();
     }
     setScreen('login');
+    setShow2FA(false);
+    setTwoFAError(null);
   };
 
   const formatTime = (seconds) => {
@@ -249,7 +290,23 @@ function AppContent() {
 
     switch (screen) {
       case 'login':
-        return <LoginScreen onLogin={handleLogin} />;
+        return (
+          <LoginScreen
+            onLogin={handleLogin}
+            onRegister={handleRegister}
+            onForgotPassword={handleForgotPassword}
+          />
+        );
+
+      case '2fa':
+        return (
+          <TwoFactorScreen
+            onVerify={handleVerify2FA}
+            onBack={() => setScreen('login')}
+            onBackupCode={handleBackupCode}
+            error={twoFAError}
+          />
+        );
 
       case 'tasks':
         return (
@@ -299,8 +356,8 @@ function AppContent() {
     }
   };
 
-  // Show header on all screens except login
-  const showHeader = screen !== 'login';
+  // Show header on all screens except login and 2FA
+  const showHeader = screen !== 'login' && screen !== '2fa';
   const showBackButton = screen === 'settings' || screen === 'projectDetail';
 
   const getBackText = () => {

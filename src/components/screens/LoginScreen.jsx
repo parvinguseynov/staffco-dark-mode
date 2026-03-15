@@ -1,112 +1,302 @@
 import { useState, useContext } from 'react';
-import { OpenNewWindow } from 'iconoir-react';
+import { motion } from 'framer-motion';
 import { ThemeContext } from '../../context/ThemeContext';
 import { TalyvnLogo } from '../brand/TalyvnLogo';
 
-export function LoginScreen({ onLogin }) {
-  const { theme } = useContext(ThemeContext);
+export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
+  const { theme, isDarkMode } = useContext(ThemeContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
   return (
-    <div className="flex flex-col h-full" style={{ background: theme.app.windowBg }}>
-      {/* Main content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8">
-        {/* Logo */}
-        <div className="mb-8">
-          <TalyvnLogo
-            size="lg"
-            showWordmark={true}
-            style={{ color: theme.app.textPrimary }}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        background: theme?.app?.windowBg || '#FFFFFF',
+      }}
+    >
+      {/* Header with logo */}
+      <div style={{ padding: '24px 32px 0' }}>
+        <TalyvnLogo
+          size="md"
+          showWordmark={true}
+          style={{ color: theme.app.textPrimary }}
+        />
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column' }}>
+        {/* Title */}
+        <h1
+          style={{
+            fontSize: '24px',
+            fontWeight: 700,
+            color: theme?.app?.textPrimary || '#1E293B',
+            marginBottom: '8px',
+          }}
+        >
+          Welcome to talyvn
+        </h1>
+        <p
+          style={{
+            fontSize: '14px',
+            color: theme?.app?.textSecondary || '#64748B',
+            marginBottom: '32px',
+          }}
+        >
+          Enter your email and password to continue.
+        </p>
+
+        {/* Email Field */}
+        <div style={{ marginBottom: '16px' }}>
+          <label
+            style={{
+              display: 'block',
+              fontSize: '13px',
+              fontWeight: 500,
+              color: theme?.app?.textPrimary || '#1E293B',
+              marginBottom: '6px',
+            }}
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            placeholder="Enter your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: `1px solid ${theme?.app?.border || '#E2E8F0'}`,
+              background: theme?.app?.cardBg || '#F8FAFC',
+              fontSize: '14px',
+              color: theme?.app?.textPrimary || '#1E293B',
+              outline: 'none',
+            }}
           />
         </div>
 
-        {/* Email field */}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full max-w-sm mb-3 px-4 py-3 rounded-xl text-sm outline-none transition-all"
-          style={{
-            background: theme.app.cardBg,
-            border: `1px solid ${theme.app.border}`,
-            color: theme.app.textPrimary,
-          }}
-        />
-
-        {/* Password field */}
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full max-w-sm mb-4 px-4 py-3 rounded-xl text-sm outline-none transition-all"
-          style={{
-            background: theme.app.cardBg,
-            border: `1px solid ${theme.app.border}`,
-            color: theme.app.textPrimary,
-          }}
-        />
-
-        {/* Forgot password */}
-        <button
-          className="text-sm mb-6 hover:underline transition-all"
-          style={{ color: theme.app.accentBlue }}
-        >
-          Forgot password?
-        </button>
-
-        {/* Sign in button */}
-        <button
-          onClick={onLogin}
-          className="w-full max-w-sm py-3 rounded-xl text-sm font-medium mb-4 transition-all hover:opacity-90"
-          style={{ background: theme.app.accentBlue, color: 'white' }}
-        >
-          Sign In
-        </button>
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 w-full max-w-sm mb-4">
-          <div className="flex-1 h-px" style={{ background: theme.app.border }} />
-          <span className="text-xs" style={{ color: theme.app.textMuted }}>or</span>
-          <div className="flex-1 h-px" style={{ background: theme.app.border }} />
+        {/* Password Field */}
+        <div style={{ marginBottom: '16px' }}>
+          <label
+            style={{
+              display: 'block',
+              fontSize: '13px',
+              fontWeight: 500,
+              color: theme?.app?.textPrimary || '#1E293B',
+              marginBottom: '6px',
+            }}
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: `1px solid ${theme?.app?.border || '#E2E8F0'}`,
+              background: theme?.app?.cardBg || '#F8FAFC',
+              fontSize: '14px',
+              color: theme?.app?.textPrimary || '#1E293B',
+              outline: 'none',
+            }}
+          />
         </div>
 
-        {/* Google Sign In */}
-        <button
-          onClick={onLogin}
-          className="w-full max-w-sm py-3 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all hover:opacity-90"
+        {/* Remember me + Forgot Password */}
+        <div
           style={{
-            background: theme.app.cardBg,
-            color: theme.app.textPrimary,
-            border: `1px solid ${theme.app.border}`,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '24px',
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M18 10.2c0-.6-.1-1.2-.2-1.8H10v3.4h4.5c-.2 1-.8 1.9-1.7 2.4v2.2h2.7c1.6-1.5 2.5-3.7 2.5-6.2z" fill="#4285F4"/>
-            <path d="M10 18c2.3 0 4.2-.8 5.6-2.1l-2.7-2.2c-.8.5-1.7.8-2.9.8-2.2 0-4.1-1.5-4.8-3.5H2.4v2.3C3.8 16 6.7 18 10 18z" fill="#34A853"/>
-            <path d="M5.2 11c-.2-.5-.3-1.1-.3-1.7s.1-1.2.3-1.7V5.3H2.4C1.5 6.9 1 8.4 1 10s.5 3.1 1.4 4.7l2.8-2.3z" fill="#FBBC05"/>
-            <path d="M10 4.2c1.2 0 2.3.4 3.2 1.2l2.4-2.4C14.2 1.6 12.3.8 10 .8 6.7.8 3.8 2.8 2.4 5.5l2.8 2.3C5.9 5.7 7.8 4.2 10 4.2z" fill="#EA4335"/>
-          </svg>
-          Sign in with Google
-        </button>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+            />
+            <span style={{ fontSize: '13px', color: theme?.app?.textSecondary || '#64748B' }}>
+              Remember me
+            </span>
+          </label>
+          <button
+            onClick={onForgotPassword}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '13px',
+              color: '#3B82F6',
+              cursor: 'pointer',
+              fontWeight: 500,
+            }}
+          >
+            Forgot Password?
+          </button>
+        </div>
+
+        {/* Sign In Button */}
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onLogin}
+          style={{
+            width: '100%',
+            padding: '14px',
+            borderRadius: '12px',
+            border: 'none',
+            background: 'linear-gradient(135deg, #60A5FA, #3B82F6)',
+            color: 'white',
+            fontSize: '14px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            marginBottom: '20px',
+          }}
+        >
+          Sign in
+        </motion.button>
+
+        {/* Divider */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            marginBottom: '20px',
+          }}
+        >
+          <div style={{ flex: 1, height: '1px', background: theme?.app?.border || '#E2E8F0' }} />
+          <span style={{ fontSize: '13px', color: theme?.app?.textMuted || '#94A3B8' }}>
+            Or login with
+          </span>
+          <div style={{ flex: 1, height: '1px', background: theme?.app?.border || '#E2E8F0' }} />
+        </div>
+
+        {/* Social Login Buttons */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+          {/* Google */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '12px',
+              borderRadius: '10px',
+              border: `1px solid ${theme?.app?.border || '#E2E8F0'}`,
+              background: theme?.app?.cardBg || 'white',
+              fontSize: '14px',
+              fontWeight: 500,
+              color: theme?.app?.textPrimary || '#1E293B',
+              cursor: 'pointer',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Google
+          </motion.button>
+
+          {/* GitHub */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '12px',
+              borderRadius: '10px',
+              border: `1px solid ${theme?.app?.border || '#E2E8F0'}`,
+              background: theme?.app?.cardBg || 'white',
+              fontSize: '14px',
+              fontWeight: 500,
+              color: theme?.app?.textPrimary || '#1E293B',
+              cursor: 'pointer',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill={theme?.app?.textPrimary || '#1E293B'}>
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Github
+          </motion.button>
+        </div>
+
+        {/* Register Link */}
+        <div
+          style={{
+            padding: '16px',
+            borderRadius: '12px',
+            border: `1px solid ${theme?.app?.border || '#E2E8F0'}`,
+            background: theme?.app?.cardBg || '#F8FAFC',
+            textAlign: 'center',
+          }}
+        >
+          <span style={{ fontSize: '14px', color: theme?.app?.textSecondary || '#64748B' }}>
+            Don't have an account?{' '}
+          </span>
+          <button
+            onClick={onRegister}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '14px',
+              color: '#3B82F6',
+              cursor: 'pointer',
+              fontWeight: 600,
+            }}
+          >
+            Register
+          </button>
+        </div>
       </div>
 
       {/* Footer */}
       <div
-        className="flex items-center justify-between px-5 py-4 border-t"
-        style={{ borderColor: theme.app.border }}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '12px 20px',
+          borderTop: `1px solid ${theme?.app?.border || '#E2E8F0'}`,
+        }}
       >
-        <span className="text-xs" style={{ color: theme.app.textMuted }}>
-          v2.1.0.3
+        <span style={{ fontSize: '12px', color: theme?.app?.textMuted || '#94A3B8' }}>
+          v1.0.3
         </span>
         <button
-          className="text-xs flex items-center gap-1 transition-all hover:opacity-80"
-          style={{ color: theme.app.accentBlue }}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '13px',
+            color: '#3B82F6',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
         >
-          Open Dashboard
-          <OpenNewWindow width={12} height={12} />
+          Open Dashboard ↗
         </button>
       </div>
     </div>

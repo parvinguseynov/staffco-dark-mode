@@ -5,3 +5,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
+// force rebuild Mon Mar 16 23:53:16 +04 2026

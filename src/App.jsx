@@ -808,8 +808,8 @@ function SettingsContent() {
             style={{
               padding: '16px',
               borderRadius: '12px',
-              border: selectedPreset === 'midnight' ? '2px solid #A78BFA' : `1px solid ${theme.app.border}`,
-              background: selectedPreset === 'midnight' ? 'rgba(167, 139, 250, 0.1)' : 'transparent',
+              border: selectedPreset === 'midnight' ? '2px solid #8B5CF6' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'midnight' ? 'rgba(139, 92, 246, 0.1)' : 'transparent',
               cursor: 'pointer',
               textAlign: 'left',
               position: 'relative',
@@ -817,7 +817,7 @@ function SettingsContent() {
             }}
             onMouseEnter={(e) => {
               if (selectedPreset !== 'midnight') {
-                e.currentTarget.style.background = 'rgba(167, 139, 250, 0.05)';
+                e.currentTarget.style.background = 'rgba(139, 92, 246, 0.05)';
               }
             }}
             onMouseLeave={(e) => {
@@ -827,9 +827,9 @@ function SettingsContent() {
             }}
           >
             <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F0A1F' }} />
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#1A1232' }} />
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#A78BFA' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F0D1A' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#1A1726' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#8B5CF6' }} />
             </div>
             <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
               Midnight
@@ -845,7 +845,7 @@ function SettingsContent() {
                 width: '20px',
                 height: '20px',
                 borderRadius: '50%',
-                background: '#A78BFA',
+                background: '#8B5CF6',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -861,8 +861,8 @@ function SettingsContent() {
             style={{
               padding: '16px',
               borderRadius: '12px',
-              border: selectedPreset === 'ocean' ? '2px solid #38BDF8' : `1px solid ${theme.app.border}`,
-              background: selectedPreset === 'ocean' ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
+              border: selectedPreset === 'ocean' ? '2px solid #06B6D4' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'ocean' ? 'rgba(6, 182, 212, 0.1)' : 'transparent',
               cursor: 'pointer',
               textAlign: 'left',
               position: 'relative',
@@ -870,7 +870,7 @@ function SettingsContent() {
             }}
             onMouseEnter={(e) => {
               if (selectedPreset !== 'ocean') {
-                e.currentTarget.style.background = 'rgba(56, 189, 248, 0.05)';
+                e.currentTarget.style.background = 'rgba(6, 182, 212, 0.05)';
               }
             }}
             onMouseLeave={(e) => {
@@ -880,9 +880,9 @@ function SettingsContent() {
             }}
           >
             <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0A1929' }} />
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F2942' }} />
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#38BDF8' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0A1018' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#111B27' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#06B6D4' }} />
             </div>
             <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
               Ocean
@@ -898,7 +898,7 @@ function SettingsContent() {
                 width: '20px',
                 height: '20px',
                 borderRadius: '50%',
-                background: '#38BDF8',
+                background: '#06B6D4',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -915,8 +915,8 @@ function SettingsContent() {
               gridColumn: '1 / -1',
               padding: '16px',
               borderRadius: '12px',
-              border: selectedPreset === 'slate' ? '2px solid #64748B' : `1px solid ${theme.app.border}`,
-              background: selectedPreset === 'slate' ? 'rgba(100, 116, 139, 0.1)' : 'transparent',
+              border: selectedPreset === 'slate' ? '2px solid #A1A1AA' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'slate' ? 'rgba(161, 161, 170, 0.1)' : 'transparent',
               cursor: 'pointer',
               textAlign: 'left',
               position: 'relative',
@@ -924,7 +924,7 @@ function SettingsContent() {
             }}
             onMouseEnter={(e) => {
               if (selectedPreset !== 'slate') {
-                e.currentTarget.style.background = 'rgba(100, 116, 139, 0.05)';
+                e.currentTarget.style.background = 'rgba(161, 161, 170, 0.05)';
               }
             }}
             onMouseLeave={(e) => {
@@ -934,9 +934,9 @@ function SettingsContent() {
             }}
           >
             <div style={{ display: 'flex', gap: '4px', marginBottom: '12px', maxWidth: '50%' }}>
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F1419' }} />
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#1C2128' }} />
-              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#64748B' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#18181B' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#27272A' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#A1A1AA' }} />
             </div>
             <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
               Slate
@@ -952,7 +952,7 @@ function SettingsContent() {
                 width: '20px',
                 height: '20px',
                 borderRadius: '50%',
-                background: '#64748B',
+                background: '#A1A1AA',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

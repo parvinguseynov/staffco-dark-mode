@@ -57,19 +57,19 @@ export const themePresets = [
     icon: '🌆',
     theme: {
       app: {
-        windowBg: '#0F0A1F',
-        cardBg: '#1A1232',
-        elevatedBg: '#2D1F4A',
-        hoverBg: '#3D2A5F',
-        border: 'rgba(167, 139, 250, 0.15)',
-        textPrimary: '#F1F0FF',
-        textSecondary: '#D4C5FF',
-        textMuted: '#A78BFA',
+        windowBg: '#0F0D1A',        // Deep purple-black
+        cardBg: '#1A1726',          // Purple-tinted cards (more distinct)
+        elevatedBg: '#252136',
+        hoverBg: '#302846',
+        border: 'rgba(139, 92, 246, 0.15)',
+        textPrimary: '#F1F5F9',
+        textSecondary: '#A5A0B8',   // Purple-tinted secondary text
+        textMuted: '#6E6880',       // Purple-tinted muted
         accentBlue: '#818CF8',
         accentGreen: '#34D399',
         accentRed: '#F87171',
         accentOrange: '#FBBF24',
-        accentPurple: '#A78BFA',
+        accentPurple: '#8B5CF6',    // Purple accent
         accentActiveTask: '#A78BFA',
       },
     },
@@ -81,20 +81,20 @@ export const themePresets = [
     icon: '🌊',
     theme: {
       app: {
-        windowBg: '#0A1929',
-        cardBg: '#0F2942',
-        elevatedBg: '#1A3A52',
-        hoverBg: '#244B66',
-        border: 'rgba(56, 189, 248, 0.15)',
-        textPrimary: '#E0F2FE',
-        textSecondary: '#BAE6FD',
-        textMuted: '#7DD3FC',
+        windowBg: '#0A1018',        // Deep ocean blue-black
+        cardBg: '#111B27',          // Teal-tinted cards (more distinct)
+        elevatedBg: '#1A2836',
+        hoverBg: '#233545',
+        border: 'rgba(6, 182, 212, 0.12)',
+        textPrimary: '#F1F5F9',
+        textSecondary: '#8FAAB8',   // Teal-tinted secondary text
+        textMuted: '#5A7585',       // Teal-tinted muted
         accentBlue: '#38BDF8',
         accentGreen: '#2DD4BF',
         accentRed: '#FB7185',
         accentOrange: '#FDBA74',
         accentPurple: '#C084FC',
-        accentActiveTask: '#2DD4BF',
+        accentActiveTask: '#06B6D4', // Cyan accent
       },
     },
   },
@@ -105,20 +105,20 @@ export const themePresets = [
     icon: '⚫',
     theme: {
       app: {
-        windowBg: '#0F1419',
-        cardBg: '#1C2128',
-        elevatedBg: '#2D333B',
-        hoverBg: '#373E47',
-        border: 'rgba(148, 163, 184, 0.15)',
-        textPrimary: '#E6EDF3',
-        textSecondary: '#C9D1D9',
-        textMuted: '#8B949E',
-        accentBlue: '#58A6FF',
+        windowBg: '#18181B',        // Pure dark gray (no blue tint)
+        cardBg: '#27272A',          // Neutral gray cards (more distinct)
+        elevatedBg: '#3F3F46',
+        hoverBg: '#52525B',
+        border: 'rgba(161, 161, 170, 0.12)',
+        textPrimary: '#FAFAFA',
+        textSecondary: '#A1A1AA',   // Neutral gray secondary
+        textMuted: '#71717A',       // Neutral gray muted
+        accentBlue: '#60A5FA',
         accentGreen: '#3FB950',
-        accentRed: '#F85149',
-        accentOrange: '#D29922',
-        accentPurple: '#BC8CFF',
-        accentActiveTask: '#3FB950',
+        accentRed: '#F87171',
+        accentOrange: '#FB923C',
+        accentPurple: '#A78BFA',
+        accentActiveTask: '#A1A1AA', // Gray accent
       },
     },
   },

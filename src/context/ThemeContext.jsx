@@ -6,6 +6,7 @@ export const ThemeContext = createContext({
   isDarkMode: true,
   theme: darkTheme,
   toggleTheme: () => {},
+  setDarkMode: () => {},
   customColors: null,
   setCustomColors: () => {},
   resetToDefaultTheme: () => {},
@@ -140,6 +141,11 @@ export function ThemeProvider({ children }) {
     localStorage.removeItem('staffco-custom-colors');
   };
 
+  // Set dark mode without clearing custom colors (for preset application)
+  const setDarkMode = (isDark) => {
+    setIsDarkMode(isDark);
+  };
+
   const updateCustomColors = (newColors) => {
     // Ensure the new colors have proper structure
     if (newColors) {
@@ -170,6 +176,7 @@ export function ThemeProvider({ children }) {
     <ThemeContext.Provider value={{
       isDarkMode,
       toggleTheme,
+      setDarkMode,
       theme: safeTheme,
       customColors,
       setCustomColors: updateCustomColors,

@@ -493,7 +493,7 @@ function AppContent() {
 
 // Simple Settings component - inline to avoid import issues
 function SettingsContent() {
-  const { theme, isDarkMode, toggleTheme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
+  const { theme, isDarkMode, toggleTheme, setDarkMode, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
 
   // Add state for toggles
   const [launchAtStartup, setLaunchAtStartup] = useState(true);
@@ -507,16 +507,20 @@ function SettingsContent() {
 
     if (!preset) return;
 
+    console.log('🎨 Applying preset:', presetId, preset);
+
     // For default themes, reset to base theme and toggle dark/light mode
     if (presetId === 'default-dark') {
       resetToDefaultTheme();
-      if (!isDarkMode) toggleTheme();
+      if (!isDarkMode) setDarkMode(true);
     } else if (presetId === 'default-light') {
       resetToDefaultTheme();
-      if (isDarkMode) toggleTheme();
+      if (isDarkMode) setDarkMode(false);
     } else {
-      // For custom presets, apply custom colors and ensure dark mode
-      if (!isDarkMode) toggleTheme();
+      // For custom presets (Midnight, Ocean, Slate):
+      // 1. Ensure dark mode is on FIRST (without clearing colors)
+      // 2. Then apply the custom preset colors
+      if (!isDarkMode) setDarkMode(true);
       setCustomColors(preset.theme);
     }
   };

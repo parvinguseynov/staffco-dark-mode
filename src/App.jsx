@@ -493,12 +493,33 @@ function AppContent() {
 
 // Simple Settings component - inline to avoid import issues
 function SettingsContent() {
-  const { theme, isDarkMode, toggleTheme, setCustomColors } = useContext(ThemeContext);
+  const { theme, isDarkMode, toggleTheme, setCustomColors, resetToDefaultTheme } = useContext(ThemeContext);
 
   // Add state for toggles
   const [launchAtStartup, setLaunchAtStartup] = useState(true);
   const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
-  const [selectedPreset, setSelectedPreset] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState('default-dark');
+
+  // Apply preset function
+  const applyPreset = (presetId) => {
+    setSelectedPreset(presetId);
+    const preset = themePresets.find(p => p.id === presetId);
+
+    if (!preset) return;
+
+    // For default themes, reset to base theme and toggle dark/light mode
+    if (presetId === 'default-dark') {
+      resetToDefaultTheme();
+      if (!isDarkMode) toggleTheme();
+    } else if (presetId === 'default-light') {
+      resetToDefaultTheme();
+      if (isDarkMode) toggleTheme();
+    } else {
+      // For custom presets, apply custom colors and ensure dark mode
+      if (!isDarkMode) toggleTheme();
+      setCustomColors(preset.theme);
+    }
+  };
 
   console.log('⚙️ SettingsContent rendering, theme:', theme);
   console.log('⚙️ isDarkMode:', isDarkMode);
@@ -634,159 +655,291 @@ function SettingsContent() {
         </div>
       </div>
 
-      {/* Theme Card */}
+      {/* Theme Section - Unified Design */}
       <div style={{
         marginTop: '16px',
         background: theme.app.cardBg,
         borderRadius: '16px',
         border: `1px solid ${theme.app.border}`,
-        padding: '16px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        padding: '20px',
       }}>
-        <div>
-          <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary }}>
-            Appearance
+        {/* Section Header */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ fontSize: '16px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '4px' }}>
+            Theme
           </div>
-          <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
-            Choose theme
+          <div style={{ fontSize: '13px', color: theme.app.textSecondary }}>
+            Choose your preferred color scheme
           </div>
         </div>
 
-        {/* Theme toggle buttons */}
-        <div style={{
-          display: 'flex',
-          background: theme.app.elevatedBg,
-          borderRadius: '10px',
-          overflow: 'hidden',
-          border: `1px solid ${theme.app.border}`,
-        }}>
+        {/* Theme Presets Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          {/* Default Dark */}
           <button
-            onClick={() => isDarkMode && toggleTheme()}
+            onClick={() => applyPreset('default-dark')}
             style={{
-              width: '44px',
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: !isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
-              border: 'none',
+              padding: '16px',
+              borderRadius: '12px',
+              border: selectedPreset === 'default-dark' ? '2px solid #60A5FA' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'default-dark' ? 'rgba(96, 165, 250, 0.1)' : 'transparent',
               cursor: 'pointer',
-              fontSize: '18px',
+              textAlign: 'left',
+              position: 'relative',
               transition: 'all 0.2s ease',
             }}
-          >
-            ☀️
-          </button>
-          <button
-            onClick={() => !isDarkMode && toggleTheme()}
-            style={{
-              width: '44px',
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '18px',
-              transition: 'all 0.2s ease',
+            onMouseEnter={(e) => {
+              if (selectedPreset !== 'default-dark') {
+                e.currentTarget.style.background = 'rgba(96, 165, 250, 0.05)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedPreset !== 'default-dark') {
+                e.currentTarget.style.background = 'transparent';
+              }
             }}
           >
-            🌙
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F172A' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#1E293B' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#60A5FA' }} />
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
+              Default Dark
+            </div>
+            <div style={{ fontSize: '11px', color: theme.app.textMuted }}>
+              Classic dark theme
+            </div>
+            {selectedPreset === 'default-dark' && (
+              <div style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#60A5FA',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</span>
+              </div>
+            )}
           </button>
-        </div>
-      </div>
 
-      {/* Theme Presets Card */}
-      <div style={{
-        marginTop: '16px',
-        background: theme.app.cardBg,
-        borderRadius: '16px',
-        border: `1px solid ${theme.app.border}`,
-        padding: '16px',
-      }}>
-        <div style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: theme.app.textPrimary,
-          marginBottom: '4px',
-        }}>
-          Theme Presets
-        </div>
-        <div style={{
-          fontSize: '12px',
-          color: theme.app.textSecondary,
-          marginBottom: '16px',
-        }}>
-          Apply ready-made color schemes with one click
-        </div>
+          {/* Default Light */}
+          <button
+            onClick={() => applyPreset('default-light')}
+            style={{
+              padding: '16px',
+              borderRadius: '12px',
+              border: selectedPreset === 'default-light' ? '2px solid #3B82F6' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'default-light' ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+              cursor: 'pointer',
+              textAlign: 'left',
+              position: 'relative',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (selectedPreset !== 'default-light') {
+                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.05)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedPreset !== 'default-light') {
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
+          >
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#FFFFFF', border: '1px solid #E2E8F0' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#F8FAFC', border: '1px solid #E2E8F0' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#3B82F6' }} />
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
+              Default Light
+            </div>
+            <div style={{ fontSize: '11px', color: theme.app.textMuted }}>
+              Clean and bright
+            </div>
+            {selectedPreset === 'default-light' && (
+              <div style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#3B82F6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</span>
+              </div>
+            )}
+          </button>
 
-        {/* Preset buttons grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '10px',
-        }}>
-          {themePresets.map((preset) => (
-            <button
-              key={preset.id}
-              onClick={() => {
-                setCustomColors(preset.theme);
-                setSelectedPreset(preset.id);
-              }}
-              style={{
-                padding: '12px',
-                borderRadius: '12px',
-                border: selectedPreset === preset.id
-                  ? `2px solid ${theme.app.accentBlue}`
-                  : `1px solid ${theme.app.border}`,
-                background: selectedPreset === preset.id
-                  ? `${theme.app.elevatedBg}`
-                  : theme.app.elevatedBg,
-                cursor: 'pointer',
-                textAlign: 'left',
-                transition: 'all 0.2s ease',
-                boxShadow: selectedPreset === preset.id
-                  ? `0 0 0 3px ${theme.app.accentBlue}20`
-                  : 'none',
-              }}
-              onMouseEnter={(e) => {
-                if (selectedPreset !== preset.id) {
-                  e.currentTarget.style.background = theme.app.hoverBg;
-                  e.currentTarget.style.borderColor = theme.app.accentBlue + '50';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (selectedPreset !== preset.id) {
-                  e.currentTarget.style.background = theme.app.elevatedBg;
-                  e.currentTarget.style.borderColor = theme.app.border;
-                }
-              }}
-            >
+          {/* Midnight */}
+          <button
+            onClick={() => applyPreset('midnight')}
+            style={{
+              padding: '16px',
+              borderRadius: '12px',
+              border: selectedPreset === 'midnight' ? '2px solid #A78BFA' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'midnight' ? 'rgba(167, 139, 250, 0.1)' : 'transparent',
+              cursor: 'pointer',
+              textAlign: 'left',
+              position: 'relative',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (selectedPreset !== 'midnight') {
+                e.currentTarget.style.background = 'rgba(167, 139, 250, 0.05)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedPreset !== 'midnight') {
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
+          >
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F0A1F' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#1A1232' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#A78BFA' }} />
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
+              Midnight
+            </div>
+            <div style={{ fontSize: '11px', color: theme.app.textMuted }}>
+              Purple accents
+            </div>
+            {selectedPreset === 'midnight' && (
               <div style={{
-                fontSize: '20px',
-                marginBottom: '6px',
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#A78BFA',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-                {preset.icon}
+                <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</span>
               </div>
+            )}
+          </button>
+
+          {/* Ocean */}
+          <button
+            onClick={() => applyPreset('ocean')}
+            style={{
+              padding: '16px',
+              borderRadius: '12px',
+              border: selectedPreset === 'ocean' ? '2px solid #38BDF8' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'ocean' ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
+              cursor: 'pointer',
+              textAlign: 'left',
+              position: 'relative',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (selectedPreset !== 'ocean') {
+                e.currentTarget.style.background = 'rgba(56, 189, 248, 0.05)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedPreset !== 'ocean') {
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
+          >
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0A1929' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F2942' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#38BDF8' }} />
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
+              Ocean
+            </div>
+            <div style={{ fontSize: '11px', color: theme.app.textMuted }}>
+              Cyan tones
+            </div>
+            {selectedPreset === 'ocean' && (
               <div style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: theme.app.textPrimary,
-                marginBottom: '2px',
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#38BDF8',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-                {preset.name}
+                <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</span>
               </div>
+            )}
+          </button>
+
+          {/* Slate - Full Width */}
+          <button
+            onClick={() => applyPreset('slate')}
+            style={{
+              gridColumn: '1 / -1',
+              padding: '16px',
+              borderRadius: '12px',
+              border: selectedPreset === 'slate' ? '2px solid #64748B' : `1px solid ${theme.app.border}`,
+              background: selectedPreset === 'slate' ? 'rgba(100, 116, 139, 0.1)' : 'transparent',
+              cursor: 'pointer',
+              textAlign: 'left',
+              position: 'relative',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (selectedPreset !== 'slate') {
+                e.currentTarget.style.background = 'rgba(100, 116, 139, 0.05)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedPreset !== 'slate') {
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
+          >
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '12px', maxWidth: '50%' }}>
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#0F1419' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#1C2128' }} />
+              <div style={{ flex: 1, height: '24px', borderRadius: '6px', background: '#64748B' }} />
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: theme.app.textPrimary, marginBottom: '2px' }}>
+              Slate
+            </div>
+            <div style={{ fontSize: '11px', color: theme.app.textMuted }}>
+              Minimal and neutral
+            </div>
+            {selectedPreset === 'slate' && (
               <div style={{
-                fontSize: '11px',
-                color: theme.app.textSecondary,
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#64748B',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-                {preset.description}
+                <span style={{ color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</span>
               </div>
-            </button>
-          ))}
+            )}
+          </button>
         </div>
       </div>
     </div>

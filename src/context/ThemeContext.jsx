@@ -25,6 +25,18 @@ export function ThemeProvider({ children }) {
         const parsed = JSON.parse(savedColors);
         // Validate structure - must have both app and desktop properties
         if (parsed && parsed.app && parsed.desktop) {
+          // Check for old wrong blue colors and invalidate if found
+          const wrongColors = ['#4462c5', '#6476a0', '#111827', '#12182B', '#0A0E17'];
+          const hasWrongColors = wrongColors.some(color =>
+            JSON.stringify(parsed).toLowerCase().includes(color.toLowerCase())
+          );
+
+          if (hasWrongColors) {
+            console.warn('Detected old color scheme, clearing custom colors to apply latest theme');
+            localStorage.removeItem('staffco-custom-colors');
+            return null;
+          }
+
           return parsed;
         }
         // Invalid structure, clear it
@@ -39,6 +51,32 @@ export function ThemeProvider({ children }) {
     }
     return null;
   });
+
+  // One-time cleanup on mount - force clear any cached wrong colors
+  useEffect(() => {
+    const cleanup = () => {
+      const saved = localStorage.getItem('staffco-custom-colors');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          // Check if it contains any of the old wrong color values
+          const wrongColors = ['#4462c5', '#6476a0', '#111827', '#12182B', '#0A0E17'];
+          const hasWrongColors = wrongColors.some(color =>
+            JSON.stringify(parsed).toLowerCase().includes(color.toLowerCase())
+          );
+          if (hasWrongColors) {
+            console.log('🔧 Clearing outdated custom colors, applying latest theme...');
+            localStorage.removeItem('staffco-custom-colors');
+            setCustomColors(null);
+          }
+        } catch (e) {
+          // Invalid JSON, clear it
+          localStorage.removeItem('staffco-custom-colors');
+        }
+      }
+    };
+    cleanup();
+  }, []); // Run once on mount
 
   const baseTheme = isDarkMode ? darkTheme : lightTheme;
 

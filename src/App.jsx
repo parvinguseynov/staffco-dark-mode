@@ -490,32 +490,11 @@ function AppContent() {
 
 // Simple Settings component - inline to avoid import issues
 function SettingsContent() {
-  const { theme, isDarkMode, toggleTheme, setCustomColors } = useContext(ThemeContext);
-  const { themePresets } = require('./theme/presets');
+  const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   // Add state for toggles
   const [launchAtStartup, setLaunchAtStartup] = useState(true);
   const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
-  const [selectedPreset, setSelectedPreset] = useState('defaultDark');
-
-  const applyThemePreset = (presetId) => {
-    setSelectedPreset(presetId);
-    const preset = themePresets[presetId];
-    if (preset) {
-      // Apply the preset colors
-      setCustomColors({
-        app: {
-          windowBg: preset.colors.windowBg,
-          cardBg: preset.colors.cardBg,
-          elevatedBg: preset.colors.elevatedBg,
-          hoverBg: preset.colors.hoverBg,
-          border: preset.colors.border,
-          accentBlue: preset.colors.accentBlue,
-        },
-        desktop: {},
-      });
-    }
-  };
 
   console.log('⚙️ SettingsContent rendering, theme:', theme);
   console.log('⚙️ isDarkMode:', isDarkMode);
@@ -651,171 +630,68 @@ function SettingsContent() {
         </div>
       </div>
 
-      {/* Theme Presets Card */}
+      {/* Theme Card */}
       <div style={{
         marginTop: '16px',
         background: theme.app.cardBg,
         borderRadius: '16px',
         border: `1px solid ${theme.app.border}`,
-        padding: '20px',
+        padding: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
       }}>
-        <div style={{
-          fontSize: '11px',
-          fontWeight: 600,
-          color: theme.app.textMuted,
-          marginBottom: '16px',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}>
-          Appearance
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary, marginBottom: '4px' }}>
-            Theme
+        <div>
+          <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary }}>
+            Appearance
           </div>
-          <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginBottom: '12px' }}>
-            Choose a color theme
-          </div>
-
-          {/* Theme Preset Buttons */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {Object.values(themePresets).map(preset => (
-              <button
-                key={preset.id}
-                onClick={() => applyThemePreset(preset.id)}
-                style={{
-                  position: 'relative',
-                  width: '68px',
-                  padding: '10px 8px 8px',
-                  borderRadius: '10px',
-                  border: selectedPreset === preset.id
-                    ? '2px solid #60A5FA'
-                    : `1px solid ${theme.app.border}`,
-                  background: selectedPreset === preset.id
-                    ? 'rgba(96, 165, 250, 0.1)'
-                    : 'transparent',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                {/* Color preview dots */}
-                <div style={{
-                  display: 'flex',
-                  gap: '3px',
-                  justifyContent: 'center',
-                  marginBottom: '6px',
-                }}>
-                  {preset.preview.map((color, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        width: '14px',
-                        height: '14px',
-                        borderRadius: '3px',
-                        background: color,
-                        border: '1px solid rgba(0,0,0,0.2)',
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* Preset name */}
-                <div style={{
-                  fontSize: '9px',
-                  fontWeight: 500,
-                  color: selectedPreset === preset.id ? '#60A5FA' : theme.app.textMuted,
-                  textAlign: 'center',
-                  lineHeight: 1.2,
-                }}>
-                  {preset.name}
-                </div>
-
-                {/* Checkmark for selected preset */}
-                {selectedPreset === preset.id && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '4px',
-                    right: '4px',
-                    width: '14px',
-                    height: '14px',
-                    borderRadius: '50%',
-                    background: '#60A5FA',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '8px',
-                    color: 'white',
-                    fontWeight: 600,
-                  }}>
-                    ✓
-                  </div>
-                )}
-              </button>
-            ))}
+          <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
+            Choose theme
           </div>
         </div>
 
-        {/* Light/Dark mode toggle */}
+        {/* Theme toggle buttons */}
         <div style={{
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingTop: '16px',
-          borderTop: `1px solid ${theme.app.border}`,
+          background: theme.app.elevatedBg,
+          borderRadius: '10px',
+          overflow: 'hidden',
+          border: `1px solid ${theme.app.border}`,
         }}>
-          <div>
-            <div style={{ fontSize: '14px', fontWeight: 500, color: theme.app.textPrimary }}>
-              Mode
-            </div>
-            <div style={{ fontSize: '12px', color: theme.app.textSecondary, marginTop: '2px' }}>
-              Light or dark
-            </div>
-          </div>
-
-          {/* Theme toggle buttons */}
-          <div style={{
-            display: 'flex',
-            background: theme.app.elevatedBg,
-            borderRadius: '10px',
-            overflow: 'hidden',
-            border: `1px solid ${theme.app.border}`,
-          }}>
-            <button
-              onClick={() => isDarkMode && toggleTheme()}
-              style={{
-                width: '44px',
-                height: '44px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: !isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '18px',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              ☀️
-            </button>
-            <button
-              onClick={() => !isDarkMode && toggleTheme()}
-              style={{
-                width: '44px',
-                height: '44px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '18px',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              🌙
-            </button>
-          </div>
+          <button
+            onClick={() => isDarkMode && toggleTheme()}
+            style={{
+              width: '44px',
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: !isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '18px',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            ☀️
+          </button>
+          <button
+            onClick={() => !isDarkMode && toggleTheme()}
+            style={{
+              width: '44px',
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: isDarkMode ? 'linear-gradient(135deg, #60A5FA, #3B82F6)' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '18px',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            🌙
+          </button>
         </div>
       </div>
     </div>

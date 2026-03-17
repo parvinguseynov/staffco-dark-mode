@@ -76,25 +76,25 @@ export function TasksScreen({
         <motion.div
           animate={{
             boxShadow: [
-              '0 0 0 0 rgba(239, 68, 68, 0.4)',
-              '0 0 0 10px rgba(239, 68, 68, 0)',
+              '0 0 0 0 rgba(52, 211, 153, 0.3)',
+              '0 0 0 10px rgba(52, 211, 153, 0)',
             ]
           }}
           transition={{ duration: 1.5, repeat: Infinity }}
           className="mx-5 mt-5 p-5 rounded-2xl relative"
           style={{
-            background: theme.app.gradients.cardGlass,
-            border: `1px solid ${theme.app.accentActiveTask}33`,
+            background: 'linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(16, 185, 129, 0.06))',
+            border: '1.5px solid rgba(52, 211, 153, 0.5)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
-            boxShadow: theme.app.shadows.glowRed,
+            boxShadow: '0 0 20px rgba(52, 211, 153, 0.1)',
           }}
         >
           {/* Gradient accent line at top */}
           <div
             className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
             style={{
-              background: theme.app.gradients.redAccent,
+              background: theme.app.gradients.greenAccent,
             }}
           />
 
@@ -149,19 +149,78 @@ export function TasksScreen({
           </div>
         </motion.div>
       ) : (
-        <div
-          className="mx-5 mt-5 p-5 rounded-2xl"
-          style={{
-            background: theme.app.gradients.cardGlass,
-            border: `1px solid ${theme.app.border}`,
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            boxShadow: theme.app.shadows.card,
-          }}
-        >
-          <div className="text-sm font-semibold mb-1" style={{ color: theme.app.textSecondary }}>No active task</div>
-          <div className="text-xs" style={{ color: theme.app.textMuted }}>Select a task to begin</div>
-        </div>
+        <>
+          <style>{`
+            @keyframes pulse {
+              0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+              }
+              50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+              }
+            }
+
+            @keyframes borderPulse {
+              0%, 100% {
+                border-color: rgba(52, 211, 153, 0.3);
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.2);
+              }
+              50% {
+                border-color: rgba(52, 211, 153, 0.5);
+                box-shadow: 0 0 15px 0 rgba(52, 211, 153, 0.15);
+              }
+            }
+          `}</style>
+          <div
+            className="mx-5 mt-5 rounded-2xl"
+            style={{
+              padding: '24px 20px',
+              background: theme.app.cardBg,
+              border: '1.5px dashed rgba(52, 211, 153, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              animation: 'borderPulse 3s ease-in-out infinite',
+            }}
+          >
+            {/* Pulsing green dot */}
+            <div
+              style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#34D399',
+                animation: 'pulse 2s ease-in-out infinite',
+                boxShadow: '0 0 10px rgba(52, 211, 153, 0.5)',
+                flexShrink: 0,
+              }}
+            />
+
+            {/* Text content */}
+            <div>
+              <div
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: theme.app.textPrimary,
+                  marginBottom: '2px',
+                }}
+              >
+                Ready when you are
+              </div>
+              <div
+                style={{
+                  fontSize: '13px',
+                  color: theme.app.textSecondary,
+                }}
+              >
+                Pick a task to start tracking
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Tabs */}

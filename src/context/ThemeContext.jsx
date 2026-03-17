@@ -26,7 +26,7 @@ export function ThemeProvider({ children }) {
         // Validate structure - must have both app and desktop properties
         if (parsed && parsed.app && parsed.desktop) {
           // Check for old wrong blue colors and invalidate if found
-          const wrongColors = ['#4462c5', '#6476a0', '#111827', '#12182B', '#0A0E17'];
+          const wrongColors = ['#4462c5', '#6476a0', '#111827', '#12182B', '#0A0E17', '#0e369a', '#ddd5d7'];
           const hasWrongColors = wrongColors.some(color =>
             JSON.stringify(parsed).toLowerCase().includes(color.toLowerCase())
           );
@@ -60,7 +60,7 @@ export function ThemeProvider({ children }) {
         try {
           const parsed = JSON.parse(saved);
           // Check if it contains any of the old wrong color values
-          const wrongColors = ['#4462c5', '#6476a0', '#111827', '#12182B', '#0A0E17'];
+          const wrongColors = ['#4462c5', '#6476a0', '#111827', '#12182B', '#0A0E17', '#0e369a', '#ddd5d7'];
           const hasWrongColors = wrongColors.some(color =>
             JSON.stringify(parsed).toLowerCase().includes(color.toLowerCase())
           );

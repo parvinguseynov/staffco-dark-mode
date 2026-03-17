@@ -10,14 +10,14 @@ export const darkTheme = {
 
   // talyvn App
   app: {
-    // Backgrounds - deeper, richer blacks
-    windowBg: '#0A0E17',
-    cardBg: '#12182B',
-    elevatedBg: '#1E2942',
-    hoverBg: '#283654',
+    // Backgrounds - DARK, not bright blue
+    windowBg: '#0F172A',        // Very dark blue-gray
+    cardBg: '#1E293B',          // Dark card background
+    elevatedBg: '#334155',      // Slightly lighter for elevated elements
+    hoverBg: '#3E4C63',         // Hover state
 
-    // Borders - subtle but visible
-    border: 'rgba(148, 163, 184, 0.12)',
+    // Borders
+    border: 'rgba(148, 163, 184, 0.15)',
     borderLight: 'rgba(148, 163, 184, 0.08)',
     borderFocus: 'rgba(96, 165, 250, 0.5)',
 

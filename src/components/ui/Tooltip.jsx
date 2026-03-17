@@ -36,7 +36,7 @@ export function Tooltip({ children, text, position = 'bottom' }) {
             style={{
               background: '#1E293B',
               color: '#F1F5F9',
-              border: '1px solid #334155',
+              border: '1px solid rgba(148, 163, 184, 0.15)',
               boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
             }}
           >
@@ -44,7 +44,7 @@ export function Tooltip({ children, text, position = 'bottom' }) {
             {/* Arrow */}
             <div
               className={`absolute w-2 h-2 rotate-45 ${arrowPositions[position]}`}
-              style={{ background: '#1E293B', border: '1px solid #334155' }}
+              style={{ background: '#1E293B', border: '1px solid rgba(148, 163, 184, 0.15)' }}
             />
           </motion.div>
         )}

@@ -391,9 +391,9 @@ function AppContent() {
           maxHeight: '950px',
           borderRadius: '20px',
           overflow: 'hidden',
-          background: theme?.app?.windowBg || '#111827',
+          background: theme?.app?.windowBg || '#0F172A',
           boxShadow: '0 25px 60px rgba(0, 0, 0, 0.4)',
-          border: `1px solid ${theme?.app?.border || '#334155'}`,
+          border: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -406,7 +406,7 @@ function AppContent() {
             alignItems: 'center',
             padding: '0 16px',
             background: isDarkMode ? '#1E293B' : '#FFFFFF',
-            borderBottom: `1px solid ${theme?.app?.border || '#334155'}`,
+            borderBottom: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
             position: 'relative',
           }}
         >

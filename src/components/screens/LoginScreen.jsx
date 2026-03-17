@@ -83,7 +83,7 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
               width: '100%',
               padding: '14px 16px',
               borderRadius: '12px',
-              border: `1px solid ${theme?.app?.border || '#334155'}`,
+              border: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
               background: theme?.app?.cardBg || '#1E293B',
               fontSize: '14px',
               color: theme?.app?.textPrimary || '#F1F5F9',
@@ -115,7 +115,7 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
               width: '100%',
               padding: '14px 16px',
               borderRadius: '12px',
-              border: `1px solid ${theme?.app?.border || '#334155'}`,
+              border: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
               background: theme?.app?.cardBg || '#1E293B',
               fontSize: '14px',
               color: theme?.app?.textPrimary || '#F1F5F9',
@@ -194,11 +194,11 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
             marginBottom: '20px',
           }}
         >
-          <div style={{ flex: 1, height: '1px', background: theme?.app?.border || '#334155' }} />
+          <div style={{ flex: 1, height: '1px', background: theme?.app?.border || 'rgba(148, 163, 184, 0.15)' }} />
           <span style={{ fontSize: '13px', color: theme?.app?.textMuted || '#64748B' }}>
             Or login with
           </span>
-          <div style={{ flex: 1, height: '1px', background: theme?.app?.border || '#334155' }} />
+          <div style={{ flex: 1, height: '1px', background: theme?.app?.border || 'rgba(148, 163, 184, 0.15)' }} />
         </div>
 
         {/* Social Login Buttons */}
@@ -213,7 +213,7 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
               gap: '8px',
               padding: '12px',
               borderRadius: '12px',
-              border: `1px solid ${theme?.app?.border || '#334155'}`,
+              border: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
               background: theme?.app?.cardBg || '#1E293B',
               fontSize: '14px',
               fontWeight: 500,
@@ -240,7 +240,7 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
               gap: '8px',
               padding: '12px',
               borderRadius: '12px',
-              border: `1px solid ${theme?.app?.border || '#334155'}`,
+              border: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
               background: theme?.app?.cardBg || '#1E293B',
               fontSize: '14px',
               fontWeight: 500,
@@ -260,7 +260,7 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
           style={{
             padding: '14px',
             borderRadius: '12px',
-            border: `1px solid ${theme?.app?.border || '#334155'}`,
+            border: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
             textAlign: 'center',
             background: theme?.app?.cardBg || '#1E293B',
           }}
@@ -291,7 +291,7 @@ export function LoginScreen({ onLogin, onRegister, onForgotPassword }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '14px 20px',
-          borderTop: `1px solid ${theme?.app?.border || '#334155'}`,
+          borderTop: `1px solid ${theme?.app?.border || 'rgba(148, 163, 184, 0.15)'}`,
           background: theme?.app?.windowBg || '#0F172A',
           flexShrink: 0,
         }}

@@ -11,6 +11,9 @@ import { Footer } from './components/app/Footer';
 import DesignSystemPanel from './components/DesignSystemPanel';
 import { DevModeOverlay } from './components/DevModeOverlay';
 
+// Import theme presets
+import { themePresets } from './theme/presets';
+
 // Initial data constants for reset functionality
 const initialTasks = [
   { id: 1, name: 'UX/UI Improvements...', project: 'Website Redesign', projectId: 1, seconds: 1805, isFavorite: false },
@@ -490,11 +493,12 @@ function AppContent() {
 
 // Simple Settings component - inline to avoid import issues
 function SettingsContent() {
-  const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
+  const { theme, isDarkMode, toggleTheme, setCustomColors } = useContext(ThemeContext);
 
   // Add state for toggles
   const [launchAtStartup, setLaunchAtStartup] = useState(true);
   const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
+  const [selectedPreset, setSelectedPreset] = useState(null);
 
   console.log('⚙️ SettingsContent rendering, theme:', theme);
   console.log('⚙️ isDarkMode:', isDarkMode);
@@ -692,6 +696,97 @@ function SettingsContent() {
           >
             🌙
           </button>
+        </div>
+      </div>
+
+      {/* Theme Presets Card */}
+      <div style={{
+        marginTop: '16px',
+        background: theme.app.cardBg,
+        borderRadius: '16px',
+        border: `1px solid ${theme.app.border}`,
+        padding: '16px',
+      }}>
+        <div style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: theme.app.textPrimary,
+          marginBottom: '4px',
+        }}>
+          Theme Presets
+        </div>
+        <div style={{
+          fontSize: '12px',
+          color: theme.app.textSecondary,
+          marginBottom: '16px',
+        }}>
+          Apply ready-made color schemes with one click
+        </div>
+
+        {/* Preset buttons grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '10px',
+        }}>
+          {themePresets.map((preset) => (
+            <button
+              key={preset.id}
+              onClick={() => {
+                setCustomColors(preset.theme);
+                setSelectedPreset(preset.id);
+              }}
+              style={{
+                padding: '12px',
+                borderRadius: '12px',
+                border: selectedPreset === preset.id
+                  ? `2px solid ${theme.app.accentBlue}`
+                  : `1px solid ${theme.app.border}`,
+                background: selectedPreset === preset.id
+                  ? `${theme.app.elevatedBg}`
+                  : theme.app.elevatedBg,
+                cursor: 'pointer',
+                textAlign: 'left',
+                transition: 'all 0.2s ease',
+                boxShadow: selectedPreset === preset.id
+                  ? `0 0 0 3px ${theme.app.accentBlue}20`
+                  : 'none',
+              }}
+              onMouseEnter={(e) => {
+                if (selectedPreset !== preset.id) {
+                  e.currentTarget.style.background = theme.app.hoverBg;
+                  e.currentTarget.style.borderColor = theme.app.accentBlue + '50';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (selectedPreset !== preset.id) {
+                  e.currentTarget.style.background = theme.app.elevatedBg;
+                  e.currentTarget.style.borderColor = theme.app.border;
+                }
+              }}
+            >
+              <div style={{
+                fontSize: '20px',
+                marginBottom: '6px',
+              }}>
+                {preset.icon}
+              </div>
+              <div style={{
+                fontSize: '13px',
+                fontWeight: 600,
+                color: theme.app.textPrimary,
+                marginBottom: '2px',
+              }}>
+                {preset.name}
+              </div>
+              <div style={{
+                fontSize: '11px',
+                color: theme.app.textSecondary,
+              }}>
+                {preset.description}
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>

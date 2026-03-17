@@ -499,8 +499,9 @@ function SettingsContent() {
   const [launchAtStartup, setLaunchAtStartup] = useState(true);
   const [alwaysOnTimer, setAlwaysOnTimer] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState('default-dark');
+  const [pendingPresetColors, setPendingPresetColors] = useState(null);
 
-  // Apply preset function
+  // Apply preset function - triggers dark mode switch first
   const applyPreset = (presetId) => {
     setSelectedPreset(presetId);
     const preset = themePresets.find(p => p.id === presetId);
@@ -509,7 +510,7 @@ function SettingsContent() {
 
     console.log('🎨 Applying preset:', presetId, preset);
 
-    // For default themes, reset to base theme and toggle dark/light mode
+    // For default themes, reset to base theme and set dark/light mode
     if (presetId === 'default-dark') {
       resetToDefaultTheme();
       if (!isDarkMode) setDarkMode(true);
@@ -518,12 +519,28 @@ function SettingsContent() {
       if (isDarkMode) setDarkMode(false);
     } else {
       // For custom presets (Midnight, Ocean, Slate):
-      // 1. Ensure dark mode is on FIRST (without clearing colors)
-      // 2. Then apply the custom preset colors
-      if (!isDarkMode) setDarkMode(true);
-      setCustomColors(preset.theme);
+      // We need to ensure dark mode is set BEFORE applying colors
+      // Store the colors to apply after dark mode updates
+      setPendingPresetColors(preset.theme);
+      if (!isDarkMode) {
+        // Switch to dark mode first, colors will be applied in useEffect
+        setDarkMode(true);
+      } else {
+        // Already in dark mode, apply colors immediately
+        setCustomColors(preset.theme);
+        setPendingPresetColors(null);
+      }
     }
   };
+
+  // Effect to apply preset colors after dark mode has been switched
+  useEffect(() => {
+    if (pendingPresetColors && isDarkMode) {
+      console.log('🎨 Applying pending preset colors after dark mode switch');
+      setCustomColors(pendingPresetColors);
+      setPendingPresetColors(null);
+    }
+  }, [isDarkMode, pendingPresetColors, setCustomColors]);
 
   console.log('⚙️ SettingsContent rendering, theme:', theme);
   console.log('⚙️ isDarkMode:', isDarkMode);
